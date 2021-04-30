@@ -1,11 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gotk3/gotk3/gtk"
 	"log"
-	"strconv"
-	"time"
 )
 
 func setup_window(title string) *gtk.Window {
@@ -41,7 +38,7 @@ func setup_btn(label string, onClick func()) *gtk.Button {
 	return btn
 }
 
-func setup_fixed () *gtk.Fixed {
+func setup_fixed() *gtk.Fixed {
 	fixed, err := gtk.FixedNew()
 	if err != nil {
 		log.Fatal("Unable to create GtkFixed:", err)
@@ -49,7 +46,7 @@ func setup_fixed () *gtk.Fixed {
 	return fixed
 }
 
-func setup_gui(){
+func setup_gui() {
 	win := setup_window("Money Care")
 
 	fixed := setup_fixed()
@@ -61,7 +58,6 @@ func setup_gui(){
 	fixedOth := setup_fixed()
 	fixedBills := setup_fixed()
 
-
 	popupSignIn := setup_popup(150, 120, "SignIn")
 	popupSignUp := setup_popup(150, 120, "SignUp")
 	popupFood := setup_popup(150, 120, "Food")
@@ -69,8 +65,6 @@ func setup_gui(){
 	popupOth := setup_popup(150, 120, "Other")
 	popupClo := setup_popup(150, 120, "Clothes")
 	popupBills := setup_popup(150, 120, "Bills")
-
-
 
 	btSignUp := setup_btn("SIGN UP", func() {
 		popupSignUp.ShowAll()
@@ -93,11 +87,6 @@ func setup_gui(){
 	btOth := setup_btn("OTHER", func() {
 		popupOth.ShowAll()
 	})
-
-
-
-
-
 
 	lab, err := gtk.LabelNew("Potrosili ste : 0 RSD")
 	if err != nil {
@@ -140,8 +129,6 @@ func setup_gui(){
 	if err != nil {
 		log.Fatal("Unable to create label:", err)
 	}
-
-
 
 	entry, err := gtk.EntryNew()
 	if err != nil {
@@ -188,51 +175,35 @@ func setup_gui(){
 		log.Fatal("Unable to create entry:", err)
 	}
 
-
-
-	btSignUpOK := setup_btn("OK", func() {
-		usr, err := entryUpId.GetText()
-		if err!=nil {
-			panic("")
-		}
-		prihodi, err := entryUpPrihodi.GetText()
-		if err!=nil {
-			panic("")
-		}
-		rashodi, err := entryUpRashodi.GetText()
-		if err!=nil {
-			panic("")
-		}
-		cilj, err := entryUpCilj.GetText()
-		if err!=nil {
-			panic("")
-		}
-		f1, err := strconv.ParseFloat(prihodi, 64)
-		f2, err := strconv.ParseFloat(rashodi, 64)
-		f3, err := strconv.ParseFloat(cilj, 64)
-		fmt.Println(f1, f2, f3)
-		add_user(usr, time.Now().Month(), f1, f2, f3)
-	})
 	btSignInOK := setup_btn("OK", func() {
+		usr, err := entryIn.GetText()
+		if err != nil {
+			panic("")
+		}
+		labusr, err := gtk.LabelNew(usr)
+		if err != nil {
+			log.Fatal("Unable to create label:", err)
+		}
+		fixed.Put(labusr, 580, 10)
+		fixed.ShowAll()
+		popupSignIn.Hide()
 
 	})
 	btFoodOK := setup_btn("OK", func() {
 		popupFood.Hide()
 	})
 	btChemOK := setup_btn("OK", func() {
-
+		popupChem.Hide()
 	})
 	btCloOK := setup_btn("OK", func() {
-
+		popupClo.Hide()
 	})
 	btOthOK := setup_btn("OK", func() {
-
+		popupOth.Hide()
 	})
 	btBillsOK := setup_btn("OK", func() {
-
+		popupBills.Hide()
 	})
-
-
 
 	sb, err := gtk.SpinButtonNewWithRange(0, 1, 0.1)
 	if err != nil {
@@ -267,57 +238,55 @@ func setup_gui(){
 		log.Fatal("Unable to create progress bar:", err)
 	}
 
-	fixed.Put(sb,450,580)
-	fixed.Put(pbFood,100,350)
-	fixed.Put(pbChem,600,350)
-	fixed.Put(pbClo,200,550)
-	fixed.Put(pbBill,500,550)
-	fixed.Put(pbOth,350,200)
-	fixed.Put(pbEntry,340,420)
-	fixed.Put(btSignUp,10,10)
-	fixed.Put(btSignIn,110,10)
+	fixed.Put(sb, 450, 580)
+	fixed.Put(pbFood, 100, 350)
+	fixed.Put(pbChem, 600, 350)
+	fixed.Put(pbClo, 200, 550)
+	fixed.Put(pbBill, 500, 550)
+	fixed.Put(pbOth, 350, 200)
+	fixed.Put(pbEntry, 340, 420)
+	fixed.Put(btSignUp, 10, 10)
+	fixed.Put(btSignIn, 110, 10)
 	fixed.Put(btFood, 100, 300)
 	fixed.Put(btChem, 600, 300)
 	fixed.Put(btClo, 200, 500)
 	fixed.Put(btBill, 500, 500)
 	fixed.Put(btOth, 350, 150)
 	fixed.Put(lab, 350, 300)
-	fixed.Put(entry,335,380)
+	fixed.Put(entry, 335, 380)
 	//fixed.Put(popupIn,12,30)
 
-	fixedSignIn.Put(btSignInOK,10,70)
-	fixedSignIn.Put(entryIn,0,30)
+	fixedSignIn.Put(btSignInOK, 10, 70)
+	fixedSignIn.Put(entryIn, 0, 30)
 
-	fixedSignUp.Put(btSignUpOK,10,170)
-	fixedSignUp.Put(entryUpId,100,10)
-	fixedSignUp.Put(entryUpPrihodi,100,50)
-	fixedSignUp.Put(entryUpRashodi,100,90)
-	fixedSignUp.Put(entryUpCilj,100,130)
-	fixedSignUp.Put(labUpId,0,10)
-	fixedSignUp.Put(labUpPrihodi,0,50)
-	fixedSignUp.Put(labUpRashodi,0,90)
-	fixedSignUp.Put(labUpCilj,0,130)
+	fixedSignUp.Put(entryUpId, 100, 10)
+	fixedSignUp.Put(entryUpPrihodi, 100, 50)
+	fixedSignUp.Put(entryUpRashodi, 100, 90)
+	fixedSignUp.Put(entryUpCilj, 100, 130)
+	fixedSignUp.Put(labUpId, 0, 10)
+	fixedSignUp.Put(labUpPrihodi, 0, 50)
+	fixedSignUp.Put(labUpRashodi, 0, 90)
+	fixedSignUp.Put(labUpCilj, 0, 130)
 
-	fixedFood.Put(btFoodOK,50,80)
-	fixedFood.Put(entryFood,0,40)
-	fixedFood.Put(labFood,10,10)
+	fixedFood.Put(btFoodOK, 50, 80)
+	fixedFood.Put(entryFood, 0, 40)
+	fixedFood.Put(labFood, 10, 10)
 
-	fixedChem.Put(btChemOK,50,80)
-	fixedChem.Put(entryChem,0,40)
-	fixedChem.Put(labChem,10,10)
+	fixedChem.Put(btChemOK, 50, 80)
+	fixedChem.Put(entryChem, 0, 40)
+	fixedChem.Put(labChem, 10, 10)
 
-	fixedClo.Put(btCloOK,50,80)
-	fixedClo.Put(entryClo,0,40)
-	fixedClo.Put(labClo,10,10)
+	fixedClo.Put(btCloOK, 50, 80)
+	fixedClo.Put(entryClo, 0, 40)
+	fixedClo.Put(labClo, 10, 10)
 
-	fixedOth.Put(btOthOK,50,80)
-	fixedOth.Put(entryOth,0,40)
-	fixedOth.Put(labOth,10,10)
+	fixedOth.Put(btOthOK, 50, 80)
+	fixedOth.Put(entryOth, 0, 40)
+	fixedOth.Put(labOth, 10, 10)
 
-	fixedBills.Put(btBillsOK,50,80)
-	fixedBills.Put(entryBills,0,40)
-	fixedBills.Put(labBills,10,10)
-
+	fixedBills.Put(btBillsOK, 50, 80)
+	fixedBills.Put(entryBills, 0, 40)
+	fixedBills.Put(labBills, 10, 10)
 
 	sb.Connect("value-changed", func(sb *gtk.SpinButton, pb *gtk.ProgressBar) {
 		pb.SetFraction(sb.GetValue() / 1)
