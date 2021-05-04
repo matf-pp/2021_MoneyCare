@@ -65,20 +65,29 @@ func (spendingService *SpendingService) FindUsersSpending(userIdp primitive.Obje
 
 	fmt.Println(spent)
 	return spent
-
-	//matchStage := bson.D{{"$match", bson.D{{"userId", userIdp}}}}
-	//groupStage := bson.D{{"$group", bson.D{{"_id", "$userId"}, {"total", bson.D{{"$sum", "$amount"}}}}}}
-	//showInfoCursor, err := spendingService.spendingCollection.Aggregate(*spendingService.ctx, mongo.Pipeline{matchStage, groupStage})
-	//if err != nil {
-	//	panic(err)
-	//}
-	//
-	//var showsWithInfo []bson.M
-	//if err = showInfoCursor.All(*spendingService.ctx, &showsWithInfo); err != nil {
-	//	panic(err)
-	//}
-	//fmt.Println(showsWithInfo) //return showInfoCursor, err
 }
+
+func (spendingService *SpendingService) FindUsersSpendingByCategory(userIdp primitive.ObjectID, categoryIDp primitive.ObjectID) float64 {
+	var spendingsFiltered []models.Spending
+	filterCursor, err := spendingService.spendingCollection.Find(*spendingService.ctx, bson.M{"userId": userIdp, "categoryId": categoryIDp})
+	if err != nil {
+		panic(err)
+	}
+
+	if err = filterCursor.All(*spendingService.ctx, &spendingsFiltered); err != nil {
+		log.Fatal(err)
+	}
+
+	n := len(spendingsFiltered)
+	spent := 0.0
+	for i := 0; i < n; i++ {
+		spent += spendingsFiltered[i].Amount
+	}
+
+	fmt.Println(spent)
+	return spent
+}
+
 func (spendingService *SpendingService) Find(userIdp primitive.ObjectID) (models.Spending, error) {
 	var result models.Spending
 	err := spendingService.spendingCollection.FindOne(*spendingService.ctx, bson.M{"username": userIdp}).Decode(&result)

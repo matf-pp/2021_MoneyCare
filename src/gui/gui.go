@@ -1,4 +1,4 @@
-package main
+package gui
 
 import (
 	"fmt"
@@ -22,11 +22,47 @@ func addSpending(cat string, entry *gtk.Entry) {
 	spendingService.InsertFromEntry(UserID, categoryId.ID, entry)
 }
 
-func showBalance(service *services.SpendingService, label *gtk.Label) {
-
+func showBalance(service *services.SpendingService, label *gtk.Label, pb *gtk.ProgressBar) {
 	spent := service.FindUsersSpending(UserID)
 	s := fmt.Sprint("Potrosili ste: ", spent)
 	label.SetText(s)
+
+	userService := admin.UserService
+	us, err := userService.FindOne(Username)
+	if err != nil {
+		panic(err)
+	}
+	total := us.Income
+	x := (100.00 * spent / total) / 100.00
+	pb.SetFraction(x)
+}
+
+func showBalanceByCat(service *services.SpendingService, label *gtk.Label, pb *gtk.ProgressBar, cat string) {
+	categoryService := admin.CategoryService
+	catID, err := categoryService.FindOne(cat)
+	spent := service.FindUsersSpendingByCategory(UserID, catID.ID)
+	fmt.Println(spent)
+	s := fmt.Sprint("Potrosili ste: ", spent)
+	label.SetText(s)
+
+	userService := admin.UserService
+	us, err := userService.FindOne(Username)
+	if err != nil {
+		panic(err)
+	}
+	total := us.Income
+	x := (100.00 * spent / total) / 100.00
+	pb.SetFraction(x)
+}
+
+func showBalanceForAll(labelAll *gtk.Label, labelFood *gtk.Label, labelClothes *gtk.Label, labelChem *gtk.Label, labelOther *gtk.Label, labelBills *gtk.Label, pbAll *gtk.ProgressBar, pbFood *gtk.ProgressBar, pbClothes *gtk.ProgressBar, pbChem *gtk.ProgressBar, pbOther *gtk.ProgressBar, pbBills *gtk.ProgressBar) {
+	spendingService := admin.SpendingService
+	showBalance(spendingService, labelAll, pbAll)
+	showBalanceByCat(spendingService, labelFood, pbFood, "food")
+	showBalanceByCat(spendingService, labelBills, pbBills, "bills")
+	showBalanceByCat(spendingService, labelClothes, pbClothes, "clothes")
+	showBalanceByCat(spendingService, labelOther, pbOther, "other")
+	showBalanceByCat(spendingService, labelChem, pbChem, "chem")
 }
 
 func setupWindow(title string) *gtk.Window {
@@ -81,12 +117,20 @@ func setupLabel(text string) *gtk.Label {
 func setupEntry() *gtk.Entry {
 	entry, err := gtk.EntryNew()
 	if err != nil {
-		log.Fatal("Unable to create label:", err)
+		log.Fatal("Unable to create entry:", err)
 	}
 	return entry
 }
 
-func setupGui() {
+func setupProgressBar() *gtk.ProgressBar {
+	pb, err := gtk.ProgressBarNew()
+	if err != nil {
+		log.Fatal("Unable to create progress bar:", err)
+	}
+	return pb
+}
+
+func SetupGui() {
 	win := setupWindow("Money Care")
 	fixed := setupFixed()
 	fixedSignIn := setupFixed()
@@ -126,8 +170,23 @@ func setupGui() {
 	btOth := setupBtn("OTHER", func() {
 		popupOth.ShowAll()
 	})
+	btHist := setupBtn("HISTOGRAM", func() {
+		popupOth.ShowAll()
+	})
+	btPieChar := setupBtn("PIECHART", func() {
+		popupOth.ShowAll()
+	})
+	btGraph := setupBtn("GRAPH", func() {
+		popupOth.ShowAll()
+	})
 
-	labBalance := setupLabel("")
+	labBalance := setupLabel("balance")
+	labelFoodEx := setupLabel("balance")
+	labelBillsEx := setupLabel("balance")
+	labelChemEx := setupLabel("balance")
+	labelOtherEx := setupLabel("balance")
+	labelClothesEx := setupLabel("balance")
+
 	labUpID := setupLabel("ID: ")
 	labUpIncome := setupLabel("PRIHODI: ")
 	labUpOutgoings := setupLabel("RASHODI: ")
@@ -138,7 +197,14 @@ func setupGui() {
 	labClo := setupLabel("Unesite iznos u dinarima: ")
 	labBills := setupLabel("Unesite iznos u dinarima: ")
 
-	entry := setupEntry()
+	pbFood := setupProgressBar()
+	pbChem := setupProgressBar()
+	pbClo := setupProgressBar()
+	pbBill := setupProgressBar()
+	pbOth := setupProgressBar()
+	pb := setupProgressBar()
+
+	//entry := setupEntry()
 	entryIn := setupEntry()
 	entryUpID := setupEntry()
 	entryUpOutgoings := setupEntry()
@@ -175,92 +241,63 @@ func setupGui() {
 		user, err := userService.FindOne(uname)
 		UserID = user.ID
 
-		spendingService := admin.SpendingService
-		showBalance(spendingService, labBalance)
+		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
 
 		popupSignIn.Hide()
 	})
 
 	btFoodOK := setupBtn("OK", func() {
 		addSpending("food", entryFood)
-		spendingService := admin.SpendingService
-		showBalance(spendingService, labBalance)
+		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
+
 		popupFood.Hide()
 	})
 	btChemOK := setupBtn("OK", func() {
 		addSpending("chem", entryChem)
-		spendingService := admin.SpendingService
-		showBalance(spendingService, labBalance)
+		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
 		popupChem.Hide()
 	})
 	btCloOK := setupBtn("OK", func() {
 		addSpending("clothes", entryClo)
-		spendingService := admin.SpendingService
-		showBalance(spendingService, labBalance)
+		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
 		popupClo.Hide()
 	})
 	btOthOK := setupBtn("OK", func() {
 		addSpending("other", entryOth)
-		spendingService := admin.SpendingService
-		showBalance(spendingService, labBalance)
+		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
 		popupOth.Hide()
 	})
 	btBillsOK := setupBtn("OK", func() {
 		addSpending("bills", entryBills)
-		spendingService := admin.SpendingService
-		showBalance(spendingService, labBalance)
+		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
 		popupBills.Hide()
 	})
 
-	sb, err := gtk.SpinButtonNewWithRange(0, 1, 0.1)
-	if err != nil {
-		log.Fatal("Unable to create spin button:", err)
-	}
-	pbFood, err := gtk.ProgressBarNew()
-	if err != nil {
-		log.Fatal("Unable to create progress bar:", err)
-	}
-
-	pbChem, err := gtk.ProgressBarNew()
-	if err != nil {
-		log.Fatal("Unable to create progress bar:", err)
-	}
-	pbClo, err := gtk.ProgressBarNew()
-	if err != nil {
-		log.Fatal("Unable to create progress bar:", err)
-	}
-	pbBill, err := gtk.ProgressBarNew()
-	if err != nil {
-		log.Fatal("Unable to create progress bar:", err)
-	}
-	pbOth, err := gtk.ProgressBarNew()
-	if err != nil {
-		log.Fatal("Unable to create progress bar:", err)
-	}
-
-	pbOth.SetOpacity(0.1)
-
-	pbEntry, err := gtk.ProgressBarNew()
-	if err != nil {
-		log.Fatal("Unable to create progress bar:", err)
-	}
-
-	fixed.Put(sb, 450, 580)
 	fixed.Put(pbFood, 100, 350)
-	fixed.Put(pbChem, 600, 350)
-	fixed.Put(pbClo, 200, 550)
-	fixed.Put(pbBill, 500, 550)
-	fixed.Put(pbOth, 350, 200)
-	fixed.Put(pbEntry, 340, 420)
+	fixed.Put(labelFoodEx, 100, 400)
+	fixed.Put(pbChem, 500, 350)
+	fixed.Put(labelChemEx, 500, 400)
+	fixed.Put(pbClo, 150, 550)
+	fixed.Put(labelClothesEx, 150, 600)
+	fixed.Put(pbBill, 450, 550)
+	fixed.Put(labelBillsEx, 450, 600)
+	fixed.Put(pbOth, 300, 200)
+	fixed.Put(labelOtherEx, 300, 250)
+	fixed.Put(pb, 300, 420)
+
 	fixed.Put(btSignUp, 10, 10)
 	fixed.Put(btSignIn, 110, 10)
 	fixed.Put(btFood, 100, 300)
-	fixed.Put(btChem, 600, 300)
-	fixed.Put(btClo, 200, 500)
-	fixed.Put(btBill, 500, 500)
-	fixed.Put(btOth, 350, 150)
-	fixed.Put(labBalance, 350, 300)
-	fixed.Put(entry, 335, 380)
+	fixed.Put(btChem, 500, 300)
+	fixed.Put(btClo, 150, 500)
+	fixed.Put(btBill, 450, 500)
+	fixed.Put(btOth, 300, 150)
+	fixed.Put(btHist, 600, 10)
+	fixed.Put(btPieChar, 492, 10)
+	fixed.Put(btGraph, 401, 10)
+
+	fixed.Put(labBalance, 350, 330)
+	//fixed.Put(entry, 335, 380)
 	//fixed.Put(popupIn,12,30)
 
 	fixedSignIn.Put(btSignInOK, 10, 70)
@@ -295,10 +332,6 @@ func setupGui() {
 	fixedBills.Put(btBillsOK, 50, 80)
 	fixedBills.Put(entryBills, 0, 40)
 	fixedBills.Put(labBills, 10, 10)
-
-	sb.Connect("value-changed", func(sb *gtk.SpinButton, pb *gtk.ProgressBar) {
-		pb.SetFraction(sb.GetValue() / 1)
-	}, pbFood)
 
 	popupSignIn.Add(fixedSignIn)
 	popupSignUp.Add(fixedSignUp)

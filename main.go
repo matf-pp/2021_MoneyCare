@@ -4,6 +4,8 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	_ "go.mongodb.org/mongo-driver/bson/primitive"
 	"main/src/admin"
+	"main/src/gui"
+	"main/src/plots"
 )
 
 func main() {
@@ -18,6 +20,7 @@ func main() {
 
 	admin.SetupSeed()
 	gtk.Init(nil)
-	setupGui()
+	gui.SetupGui()
 	gtk.Main()
+	plots.PieChart()
 }
