@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/gotk3/gotk3/gtk"
 	"log"
+	"main/src/admin"
 )
 
 func setup_window(title string) *gtk.Window {
@@ -128,7 +129,9 @@ func setup_gui() {
 	entryBills := setup_entry()
 
 	btSignUpOK := setup_btn("OK", func() {
-		//poziv InsertFromEntry
+		userService := admin.UserService
+		userService.InsertFromEntry(entryUpId, entryUpGoal, entryUpIncome, entryUpOutgoings)
+
 	})
 
 	btSignInOK := setup_btn("OK", func() {
