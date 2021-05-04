@@ -8,7 +8,6 @@ import (
 	"time"
 )
 
-var categorynamestonumbers map[int]string
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 var users_id [90]string
 var rnorm_values [30]int
@@ -56,7 +55,7 @@ func main() {
 	userService := services.NewUserService(connection, userCollectionName)
 	categoryService := services.NewCategoryService(connection, categoryCollectionName)
 	spendingService := services.NewSpendingService(connection, spendingCollectionName)
-
+	categorynamestonumbers := make(map[int]string)
 	categorynamestonumbers[0] = "food"
 	categorynamestonumbers[1] = "chem"
 	categorynamestonumbers[2] = "other"
@@ -64,9 +63,9 @@ func main() {
 	categorynamestonumbers[4] = "bills"
 
 	for j := 0; j < 5; j++ {
-		getNormDistro(30, 10000, 2000)
+		getNormDistro(30, 10000, 3000)
 		users_id[j] = RandStringRunes(6)
-		userService.InsertOne(users_id[j])
+		userService.InsertOne(users_id[j], 0, 50000, 0)
 		iduser, _ := userService.FindOne(users_id[j])
 		for k := 0; k < 5; k++ {
 			idcategory, err := categoryService.FindOne(categorynamestonumbers[k])
@@ -80,9 +79,9 @@ func main() {
 	}
 
 	for j := 0; j < 5; j++ {
-		getNormDistro(30, 30000, 10000)
+		getNormDistro(30, 30000, 2000)
 		users_id[j] = RandStringRunes(6)
-		userService.InsertOne(users_id[j])
+		userService.InsertOne(users_id[j], 0, 150000, 0)
 		iduser, _ := userService.FindOne(users_id[j])
 		for k := 0; k < 5; k++ {
 			idcategory, err := categoryService.FindOne(categorynamestonumbers[k])
@@ -97,7 +96,7 @@ func main() {
 	for j := 0; j < 5; j++ {
 		getNormDistro(30, 50000, 10000)
 		users_id[j] = RandStringRunes(6)
-		userService.InsertOne(users_id[j])
+		userService.InsertOne(users_id[j], 0, 250000, 0)
 		iduser, _ := userService.FindOne(users_id[j])
 		for k := 0; k < 5; k++ {
 			idcategory, err := categoryService.FindOne(categorynamestonumbers[k])
