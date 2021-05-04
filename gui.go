@@ -2,9 +2,23 @@ package main
 
 import (
 	"github.com/gotk3/gotk3/gtk"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"main/src/admin"
 )
+
+var Username string
+var UserID primitive.ObjectID
+
+func addSpending(cat string, entry *gtk.Entry) {
+	categoryService := admin.CategoryService
+	categoryId, err := categoryService.FindOne(cat)
+	if err != nil {
+		panic(err)
+	}
+	spendingService := admin.SpendingService
+	spendingService.InsertFromEntry(UserID, categoryId.ID, entry)
+}
 
 func setupWindow(title string) *gtk.Window {
 	win, err := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
@@ -130,30 +144,48 @@ func setupGui() {
 	btSignUpOK := setupBtn("OK", func() {
 		userService := admin.UserService
 		userService.InsertFromEntry(entryUpID, entryUpGoal, entryUpIncome, entryUpOutgoings)
+		uname, err := entryUpID.GetText()
+		if err != nil {
+			panic(err)
+		}
+		Username = uname
+		user, err := userService.FindOne(uname)
+		UserID = user.ID
+
 		popupSignUp.Hide()
 	})
 
 	btSignInOK := setupBtn("OK", func() {
-		//userService := admin.UserService
-		//user, err := userService.FindOneFromEntry(entryIn)
-		//if err != nil{
-		//	panic(err)
-		//}
+		userService := admin.UserService
+		userService.FindOneFromEntry(entryIn)
+		uname, err := entryIn.GetText()
+		if err != nil {
+			panic(err)
+		}
+		Username = uname
+		user, err := userService.FindOne(uname)
+		UserID = user.ID
 
 	})
+
 	btFoodOK := setupBtn("OK", func() {
+		addSpending("food", entryFood)
 		popupFood.Hide()
 	})
 	btChemOK := setupBtn("OK", func() {
+		addSpending("chem", entryChem)
 		popupChem.Hide()
 	})
 	btCloOK := setupBtn("OK", func() {
+		addSpending("clothes", entryClo)
 		popupClo.Hide()
 	})
 	btOthOK := setupBtn("OK", func() {
+		addSpending("other", entryOth)
 		popupOth.Hide()
 	})
 	btBillsOK := setupBtn("OK", func() {
+		addSpending("bills", entryBills)
 		popupBills.Hide()
 	})
 

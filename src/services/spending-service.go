@@ -3,12 +3,14 @@ package services
 import (
 	"context"
 	"fmt"
+	"github.com/gotk3/gotk3/gtk"
 	bson "go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"main/src/db"
 	"main/src/models"
+	"strconv"
 )
 
 type SpendingService struct {
@@ -22,8 +24,24 @@ func NewSpendingService(connection *db.Connection, collectionName string) *Spend
 	return &spendingService
 }
 
-func (spendingService *SpendingService) InsertOne(userID primitive.ObjectID, categoryId primitive.ObjectID, amount int) (*mongo.InsertOneResult, error) {
-	spending := models.Spending{UserID: userID, CategoryID: categoryId, Amount: float64(amount)}
+func (spendingService *SpendingService) InsertOne(userID primitive.ObjectID, categoryId primitive.ObjectID, amount float64) (*mongo.InsertOneResult, error) {
+	spending := models.Spending{UserID: userID, CategoryID: categoryId, Amount: amount}
+	res, err := spendingService.spendingCollection.InsertOne(*spendingService.ctx, spending)
+	return res, err
+}
+
+func (spendingService *SpendingService) InsertFromEntry(userID primitive.ObjectID, categoryID primitive.ObjectID, entryAmount *gtk.Entry) (*mongo.InsertOneResult, error) {
+
+	amount1, err := entryAmount.GetText()
+	if err != nil {
+		panic(err)
+	}
+	amount, err := strconv.ParseFloat(amount1, 64)
+	if err != nil {
+		panic(err)
+	}
+
+	spending := models.Spending{UserID: userID, CategoryID: categoryID, Amount: amount}
 	res, err := spendingService.spendingCollection.InsertOne(*spendingService.ctx, spending)
 	return res, err
 }
