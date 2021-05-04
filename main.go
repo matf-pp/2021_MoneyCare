@@ -5,7 +5,7 @@ import (
 	_ "go.mongodb.org/mongo-driver/bson/primitive"
 	"main/src/admin"
 	"main/src/gui"
-	"main/src/plots"
+	//"main/src/plots"
 )
 
 func main() {
@@ -22,5 +22,5 @@ func main() {
 	gtk.Init(nil)
 	gui.SetupGui()
 	gtk.Main()
-	plots.PieChart()
+	//plots.PieChart()
 }

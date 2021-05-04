@@ -171,13 +171,13 @@ func SetupGui() {
 		popupOth.ShowAll()
 	})
 	btHist := setupBtn("HISTOGRAM", func() {
-		popupOth.ShowAll()
+
 	})
 	btPieChar := setupBtn("PIECHART", func() {
-		popupOth.ShowAll()
+
 	})
 	btGraph := setupBtn("GRAPH", func() {
-		popupOth.ShowAll()
+
 	})
 
 	labBalance := setupLabel("balance")
@@ -272,35 +272,65 @@ func SetupGui() {
 		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
 		popupBills.Hide()
 	})
+	btFoodClose := setupBtn("CLOSE", func() {
 
-	fixed.Put(pbFood, 100, 350)
-	fixed.Put(labelFoodEx, 100, 400)
-	fixed.Put(pbChem, 500, 350)
-	fixed.Put(labelChemEx, 500, 400)
-	fixed.Put(pbClo, 150, 550)
-	fixed.Put(labelClothesEx, 150, 600)
-	fixed.Put(pbBill, 450, 550)
-	fixed.Put(labelBillsEx, 450, 600)
-	fixed.Put(pbOth, 300, 200)
-	fixed.Put(labelOtherEx, 300, 250)
-	fixed.Put(pb, 300, 420)
+		popupFood.Hide()
+	})
+	btChemClose := setupBtn("CLOSE", func() {
+
+		popupChem.Hide()
+	})
+	btCloClose := setupBtn("CLOSE", func() {
+
+		popupClo.Hide()
+	})
+	btOthClose := setupBtn("CLOSE", func() {
+
+		popupOth.Hide()
+	})
+	btBillsClose := setupBtn("CLOSE", func() {
+
+		popupBills.Hide()
+	})
+	btSignInClose := setupBtn("CLOSE", func() {
+
+		popupSignIn.Hide()
+	})
+	btSignUpClose := setupBtn("CLOSE", func() {
+
+		popupSignUp.Hide()
+	})
+
+	fixed.Put(labelFoodEx, 250, 100)
+	fixed.Put(labelChemEx, 250, 200)
+	fixed.Put(labelClothesEx, 250, 300)
+	fixed.Put(labelBillsEx, 250, 400)
+	fixed.Put(labelOtherEx, 250, 500)
+
+	fixed.Put(pbFood, 100, 150)
+	fixed.Put(pbChem, 100, 250)
+	fixed.Put(pbClo, 100, 350)
+	fixed.Put(pbBill, 100, 450)
+	fixed.Put(pbOth, 100, 550)
+	fixed.Put(pb,470,500 )
 
 	fixed.Put(btSignUp, 10, 10)
 	fixed.Put(btSignIn, 110, 10)
-	fixed.Put(btFood, 100, 300)
-	fixed.Put(btChem, 500, 300)
-	fixed.Put(btClo, 150, 500)
-	fixed.Put(btBill, 450, 500)
-	fixed.Put(btOth, 300, 150)
-	fixed.Put(btHist, 600, 10)
-	fixed.Put(btPieChar, 492, 10)
-	fixed.Put(btGraph, 401, 10)
+	fixed.Put(btFood, 100, 100)
+	fixed.Put(btChem, 100, 200)
+	fixed.Put(btClo, 100, 300)
+	fixed.Put(btBill, 100, 400)
+	fixed.Put(btOth, 100, 500)
+	fixed.Put(btHist,640,10)
+	fixed.Put(btPieChar,532,10)
+	fixed.Put(btGraph,441,10)
 
-	fixed.Put(labBalance, 350, 330)
+	fixed.Put(labBalance, 520, 450)
 	//fixed.Put(entry, 335, 380)
 	//fixed.Put(popupIn,12,30)
 
 	fixedSignIn.Put(btSignInOK, 10, 70)
+	fixedSignIn.Put(btSignInClose, 80, 70)
 	fixedSignIn.Put(entryIn, 0, 30)
 
 	fixedSignUp.Put(entryUpID, 100, 10)
@@ -311,27 +341,36 @@ func SetupGui() {
 	fixedSignUp.Put(labUpIncome, 0, 50)
 	fixedSignUp.Put(labUpOutgoings, 0, 90)
 	fixedSignUp.Put(labUpGoal, 0, 130)
-	fixedSignUp.Put(btSignUpOK, 50, 160)
+	fixedSignUp.Put(btSignUpOK, 20, 180)
+	fixedSignUp.Put(btSignUpClose, 130, 180)
 
-	fixedFood.Put(btFoodOK, 50, 80)
+	fixedFood.Put(btFoodOK, 20, 80)
+	fixedFood.Put(btFoodClose,80,80)
 	fixedFood.Put(entryFood, 0, 40)
 	fixedFood.Put(labFood, 10, 10)
 
-	fixedChem.Put(btChemOK, 50, 80)
+	fixedChem.Put(btChemOK, 20, 80)
+	fixedChem.Put(btChemClose, 80, 80)
 	fixedChem.Put(entryChem, 0, 40)
 	fixedChem.Put(labChem, 10, 10)
 
-	fixedClo.Put(btCloOK, 50, 80)
+	fixedClo.Put(btCloOK, 20, 80)
+	fixedClo.Put(btCloClose, 80, 80)
 	fixedClo.Put(entryClo, 0, 40)
 	fixedClo.Put(labClo, 10, 10)
 
-	fixedOth.Put(btOthOK, 50, 80)
+	fixedOth.Put(btOthOK, 20, 80)
+	fixedOth.Put(btOthClose, 80, 80)
 	fixedOth.Put(entryOth, 0, 40)
 	fixedOth.Put(labOth, 10, 10)
 
-	fixedBills.Put(btBillsOK, 50, 80)
+	fixedBills.Put(btBillsOK, 20, 80)
+	fixedBills.Put(btBillsClose, 80, 80)
 	fixedBills.Put(entryBills, 0, 40)
 	fixedBills.Put(labBills, 10, 10)
+
+
+
 
 	popupSignIn.Add(fixedSignIn)
 	popupSignUp.Add(fixedSignUp)
