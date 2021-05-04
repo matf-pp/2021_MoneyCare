@@ -10,7 +10,7 @@ import (
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 var usersID [90]string
-var rnormValues [30]int
+var rnormValues [30]float64
 var connectionString string
 var databaseName string
 var userCollectionName string
@@ -40,7 +40,7 @@ func RandStringRunes(n int) string {
 
 func getNormDistro(x int, mi float32, sigma float32) {
 	for i := 0; i < x; i++ {
-		rnormValues[i] = int(normalInverse(mi, sigma))
+		rnormValues[i] = float64(normalInverse(mi, sigma))
 	}
 }
 
@@ -81,7 +81,7 @@ func SetupSeed() {
 	//		}
 	//	}
 	//}
-
+	//
 	//for j := 0; j < 5; j++ {
 	//	getNormDistro(30, 30000, 2000)
 	//	usersID[j] = RandStringRunes(6)

@@ -11,6 +11,7 @@ import (
 	"main/src/db"
 	"main/src/models"
 	"strconv"
+	"time"
 )
 
 type SpendingService struct {
@@ -25,7 +26,7 @@ func NewSpendingService(connection *db.Connection, collectionName string) *Spend
 }
 
 func (spendingService *SpendingService) InsertOne(userID primitive.ObjectID, categoryId primitive.ObjectID, amount float64) (*mongo.InsertOneResult, error) {
-	spending := models.Spending{UserID: userID, CategoryID: categoryId, Amount: amount}
+	spending := models.Spending{UserID: userID, CategoryID: categoryId, Amount: amount, Time: time.Now()}
 	res, err := spendingService.spendingCollection.InsertOne(*spendingService.ctx, spending)
 	return res, err
 }
@@ -41,12 +42,11 @@ func (spendingService *SpendingService) InsertFromEntry(userID primitive.ObjectI
 		panic(err)
 	}
 
-	spending := models.Spending{UserID: userID, CategoryID: categoryID, Amount: amount}
-	res, err := spendingService.spendingCollection.InsertOne(*spendingService.ctx, spending)
+	res, err := spendingService.InsertOne(userID, categoryID, amount)
 	return res, err
 }
 
-func (spendingService *SpendingService) FindUsersSpending(userIdp primitive.ObjectID) {
+func (spendingService *SpendingService) FindUsersSpending(userIdp primitive.ObjectID) float64 {
 	var spendingsFiltered []models.Spending
 	filterCursor, err := spendingService.spendingCollection.Find(*spendingService.ctx, bson.M{"userId": userIdp})
 	if err != nil {
@@ -64,6 +64,7 @@ func (spendingService *SpendingService) FindUsersSpending(userIdp primitive.Obje
 	}
 
 	fmt.Println(spent)
+	return spent
 
 	//matchStage := bson.D{{"$match", bson.D{{"userId", userIdp}}}}
 	//groupStage := bson.D{{"$group", bson.D{{"_id", "$userId"}, {"total", bson.D{{"$sum", "$amount"}}}}}}

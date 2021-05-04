@@ -1,10 +1,12 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gotk3/gotk3/gtk"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"log"
 	"main/src/admin"
+	"main/src/services"
 )
 
 var Username string
@@ -18,6 +20,13 @@ func addSpending(cat string, entry *gtk.Entry) {
 	}
 	spendingService := admin.SpendingService
 	spendingService.InsertFromEntry(UserID, categoryId.ID, entry)
+}
+
+func showBalance(service *services.SpendingService, label *gtk.Label) {
+
+	spent := service.FindUsersSpending(UserID)
+	s := fmt.Sprint("Potrosili ste: ", spent)
+	label.SetText(s)
 }
 
 func setupWindow(title string) *gtk.Window {
@@ -118,7 +127,7 @@ func setupGui() {
 		popupOth.ShowAll()
 	})
 
-	labBalance := setupLabel("Potrosili ste : 0 RSD")
+	labBalance := setupLabel("")
 	labUpID := setupLabel("ID: ")
 	labUpIncome := setupLabel("PRIHODI: ")
 	labUpOutgoings := setupLabel("RASHODI: ")
@@ -166,26 +175,40 @@ func setupGui() {
 		user, err := userService.FindOne(uname)
 		UserID = user.ID
 
+		spendingService := admin.SpendingService
+		showBalance(spendingService, labBalance)
+
+		popupSignIn.Hide()
 	})
 
 	btFoodOK := setupBtn("OK", func() {
 		addSpending("food", entryFood)
+		spendingService := admin.SpendingService
+		showBalance(spendingService, labBalance)
 		popupFood.Hide()
 	})
 	btChemOK := setupBtn("OK", func() {
 		addSpending("chem", entryChem)
+		spendingService := admin.SpendingService
+		showBalance(spendingService, labBalance)
 		popupChem.Hide()
 	})
 	btCloOK := setupBtn("OK", func() {
 		addSpending("clothes", entryClo)
+		spendingService := admin.SpendingService
+		showBalance(spendingService, labBalance)
 		popupClo.Hide()
 	})
 	btOthOK := setupBtn("OK", func() {
 		addSpending("other", entryOth)
+		spendingService := admin.SpendingService
+		showBalance(spendingService, labBalance)
 		popupOth.Hide()
 	})
 	btBillsOK := setupBtn("OK", func() {
 		addSpending("bills", entryBills)
+		spendingService := admin.SpendingService
+		showBalance(spendingService, labBalance)
 		popupBills.Hide()
 	})
 
