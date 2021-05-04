@@ -23,7 +23,7 @@ func NewSpendingService(connection *db.Connection, collectionName string) *Spend
 }
 
 func (spendingService *SpendingService) InsertOne(userId primitive.ObjectID, categoryId primitive.ObjectID, amount int) (*mongo.InsertOneResult, error) {
-	spending := models.Spending{UserId: userId, CategoryId: categoryId, Amount: amount}
+	spending := models.Spending{UserId: userId, CategoryId: categoryId, Amount: float64(amount)}
 	res, err := spendingService.spendingCollection.InsertOne(*spendingService.ctx, spending)
 	return res, err
 }
@@ -40,7 +40,7 @@ func (spendingService *SpendingService) FindUsersSpending(userIdp primitive.Obje
 	}
 
 	n := len(spendingsFiltered)
-	spent := 0
+	spent := 0.0
 	for i := 0; i < n; i++ {
 		spent += spendingsFiltered[i].Amount
 	}

@@ -46,6 +46,22 @@ func setup_fixed() *gtk.Fixed {
 	return fixed
 }
 
+func setup_label(text string) *gtk.Label {
+	label, err := gtk.LabelNew(text)
+	if err != nil {
+		log.Fatal("Unable to create label:", err)
+	}
+	return label
+}
+
+func setup_entry() *gtk.Entry {
+	entry, err := gtk.EntryNew()
+	if err != nil {
+		log.Fatal("Unable to create label:", err)
+	}
+	return entry
+}
+
 func setup_gui() {
 	win := setup_window("Money Care")
 
@@ -88,105 +104,34 @@ func setup_gui() {
 		popupOth.ShowAll()
 	})
 
-	lab, err := gtk.LabelNew("Potrosili ste : 0 RSD")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
-	labUpId, err := gtk.LabelNew("ID: ")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
-	labUpPrihodi, err := gtk.LabelNew("PRIHODI: ")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
-	labUpRashodi, err := gtk.LabelNew("RASHODI: ")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
-	labUpCilj, err := gtk.LabelNew("CILJ: ")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
-	labFood, err := gtk.LabelNew("Unesi iznos u din: ")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
+	labBalance := setup_label("Potrosili ste : 0 RSD")
+	labUpId := setup_label("ID: ")
+	labUpIncome := setup_label("PRIHODI: ")
+	labUpOutgoings := setup_label("RASHODI: ")
+	labUpGoal := setup_label("CILJ: ")
+	labFood := setup_label("Unesite iznos u dinarima: ")
+	labChem := setup_label("Unesite iznos u dinarima: ")
+	labOth := setup_label("Unesite iznos u dinarima: ")
+	labClo := setup_label("Unesite iznos u dinarima: ")
+	labBills := setup_label("Unesite iznos u dinarima: ")
 
-	labChem, err := gtk.LabelNew("Unesi iznos u din: ")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
-	labOth, err := gtk.LabelNew("Unesi iznos u din: ")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
-	labClo, err := gtk.LabelNew("Unesi iznos u din: ")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
-	labBills, err := gtk.LabelNew("Unesi iznos u din: ")
-	if err != nil {
-		log.Fatal("Unable to create label:", err)
-	}
+	entry := setup_entry()
+	entryIn := setup_entry()
+	entryUpId := setup_entry()
+	entryUpOutgoings := setup_entry()
+	entryUpIncome := setup_entry()
+	entryUpGoal := setup_entry()
+	entryFood := setup_entry()
+	entryChem := setup_entry()
+	entryOth := setup_entry()
+	entryClo := setup_entry()
+	entryBills := setup_entry()
 
-	entry, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryIn, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryUpId, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryUpRashodi, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryUpPrihodi, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryUpCilj, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryFood, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryChem, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryOth, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryClo, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
-	entryBills, err := gtk.EntryNew()
-	if err != nil {
-		log.Fatal("Unable to create entry:", err)
-	}
+	btSignUpOK := setup_btn("OK", func() {
+		//poziv InsertFromEntry
+	})
 
 	btSignInOK := setup_btn("OK", func() {
-		usr, err := entryIn.GetText()
-		if err != nil {
-			panic("")
-		}
-		labusr, err := gtk.LabelNew(usr)
-		if err != nil {
-			log.Fatal("Unable to create label:", err)
-		}
-		fixed.Put(labusr, 580, 10)
-		fixed.ShowAll()
-		popupSignIn.Hide()
 
 	})
 	btFoodOK := setup_btn("OK", func() {
@@ -252,7 +197,7 @@ func setup_gui() {
 	fixed.Put(btClo, 200, 500)
 	fixed.Put(btBill, 500, 500)
 	fixed.Put(btOth, 350, 150)
-	fixed.Put(lab, 350, 300)
+	fixed.Put(labBalance, 350, 300)
 	fixed.Put(entry, 335, 380)
 	//fixed.Put(popupIn,12,30)
 
@@ -260,13 +205,14 @@ func setup_gui() {
 	fixedSignIn.Put(entryIn, 0, 30)
 
 	fixedSignUp.Put(entryUpId, 100, 10)
-	fixedSignUp.Put(entryUpPrihodi, 100, 50)
-	fixedSignUp.Put(entryUpRashodi, 100, 90)
-	fixedSignUp.Put(entryUpCilj, 100, 130)
+	fixedSignUp.Put(entryUpIncome, 100, 50)
+	fixedSignUp.Put(entryUpOutgoings, 100, 90)
+	fixedSignUp.Put(entryUpGoal, 100, 130)
 	fixedSignUp.Put(labUpId, 0, 10)
-	fixedSignUp.Put(labUpPrihodi, 0, 50)
-	fixedSignUp.Put(labUpRashodi, 0, 90)
-	fixedSignUp.Put(labUpCilj, 0, 130)
+	fixedSignUp.Put(labUpIncome, 0, 50)
+	fixedSignUp.Put(labUpOutgoings, 0, 90)
+	fixedSignUp.Put(labUpGoal, 0, 130)
+	fixedSignUp.Put(btSignUpOK, 50, 160)
 
 	fixedFood.Put(btFoodOK, 50, 80)
 	fixedFood.Put(entryFood, 0, 40)

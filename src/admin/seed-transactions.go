@@ -17,6 +17,14 @@ var userCollectionName string
 var categoryCollectionName string
 var spendingCollectionName string
 
+var userService *services.UserService
+var categoryService *services.CategoryService
+var spendingService *services.SpendingService
+
+func getUserService() *services.UserService {
+	return userService
+}
+
 func init() {
 	connectionString = "mongodb://localhost:27017"
 	databaseName = "MoneyCare"
@@ -53,14 +61,14 @@ func main() {
 
 	defer connection.Disconnect()
 
-	userService := services.NewUserService(connection, userCollectionName)
-	categoryService := services.NewCategoryService(connection, categoryCollectionName)
-	spendingService := services.NewSpendingService(connection, spendingCollectionName)
+	userService = services.NewUserService(connection, userCollectionName)
+	categoryService = services.NewCategoryService(connection, categoryCollectionName)
+	spendingService = services.NewSpendingService(connection, spendingCollectionName)
 
 	getNormDistro(30, 25000, 1000)
 	for i := 1; i < 30; i++ {
 		users_id[i] = RandStringRunes(5)
-		_, err := userService.InsertOne(users_id[i])
+		_, err := userService.InsertOne(users_id[i], 1200, 1200, 1200)
 		if err != nil {
 			panic(err)
 		}
@@ -82,7 +90,7 @@ func main() {
 	getNormDistro(30, 50000, 1000)
 	for i := 30; i < 60; i++ {
 		users_id[i] = RandStringRunes(5)
-		_, err := userService.InsertOne(users_id[i])
+		_, err := userService.InsertOne(users_id[i], 2000, 2000, 2000)
 		if err != nil {
 			panic(err)
 		}
@@ -105,7 +113,7 @@ func main() {
 	getNormDistro(30, 10000, 1000)
 	for i := 60; i < 90; i++ {
 		users_id[i] = RandStringRunes(5)
-		_, err := userService.InsertOne(users_id[i])
+		_, err := userService.InsertOne(users_id[i], 2000, 2000, 2000)
 		if err != nil {
 			panic(err)
 		}
