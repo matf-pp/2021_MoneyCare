@@ -28,6 +28,7 @@ func (userService *UserService) InsertOne(userName string, g float64, in float64
 }
 
 func (userService *UserService) InsertFromEntry(entryUN *gtk.Entry, entryG *gtk.Entry, entryIn *gtk.Entry, entryOut *gtk.Entry) (*mongo.InsertOneResult, error) {
+	//fali provera da li vec postoji korisnik
 	un, err := entryUN.GetText()
 	if err != nil {
 		panic(err)
@@ -69,3 +70,11 @@ func (userService *UserService) FindOne(Cname string) (models.User, error) {
 	err := userService.userCollection.FindOne(*userService.ctx, bson.M{"username": Cname}).Decode(&result)
 	return result, err
 }
+
+//func (userService *UserService) FindOneFromEntry(entryIn *gtk.Entry) (models.User, error) {
+//	uname, err := entryIn.GetText()
+//	if err != nil {
+//		panic(err)
+//	}
+//	res, err := userService.FindOne(uname)
+//}

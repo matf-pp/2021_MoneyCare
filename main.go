@@ -1,4 +1,4 @@
-package admin
+package main
 
 import (
 	"github.com/gotk3/gotk3/gtk"
@@ -16,8 +16,8 @@ func main() {
 	//TODO: novi korisnik -> unosi sva 4 i kreira se dokument za njega za tekuci mesec
 	//TODO: na signIn provera meseca (da li ga ima u kolekciji) (kao signUp)
 
-	admin.SetSeed()
+	admin.SetupSeed()
 	gtk.Init(nil)
-	setup_gui()
+	setupGui()
 	gtk.Main()
 }

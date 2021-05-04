@@ -1,4 +1,4 @@
-package admin
+package main
 
 import (
 	"github.com/gotk3/gotk3/gtk"
@@ -6,7 +6,7 @@ import (
 	"main/src/admin"
 )
 
-func setup_window(title string) *gtk.Window {
+func setupWindow(title string) *gtk.Window {
 	win, err := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
 	if err != nil {
 		log.Fatal("Unable to create window:", err)
@@ -19,7 +19,7 @@ func setup_window(title string) *gtk.Window {
 	win.SetPosition(gtk.WIN_POS_CENTER)
 	return win
 }
-func setup_popup(width int, height int, title string) *gtk.Window {
+func setupPopup(width int, height int, title string) *gtk.Window {
 	popup, err := gtk.WindowNew(gtk.WINDOW_TOPLEVEL)
 	if err != nil {
 		log.Fatal("Unable to create window:", err)
@@ -30,7 +30,7 @@ func setup_popup(width int, height int, title string) *gtk.Window {
 	return popup
 }
 
-func setup_btn(label string, onClick func()) *gtk.Button {
+func setupBtn(label string, onClick func()) *gtk.Button {
 	btn, err := gtk.ButtonNewWithLabel(label)
 	if err != nil {
 		log.Fatal("Unable to create button:", err)
@@ -39,7 +39,7 @@ func setup_btn(label string, onClick func()) *gtk.Button {
 	return btn
 }
 
-func setup_fixed() *gtk.Fixed {
+func setupFixed() *gtk.Fixed {
 	fixed, err := gtk.FixedNew()
 	if err != nil {
 		log.Fatal("Unable to create GtkFixed:", err)
@@ -47,7 +47,7 @@ func setup_fixed() *gtk.Fixed {
 	return fixed
 }
 
-func setup_label(text string) *gtk.Label {
+func setupLabel(text string) *gtk.Label {
 	label, err := gtk.LabelNew(text)
 	if err != nil {
 		log.Fatal("Unable to create label:", err)
@@ -55,7 +55,7 @@ func setup_label(text string) *gtk.Label {
 	return label
 }
 
-func setup_entry() *gtk.Entry {
+func setupEntry() *gtk.Entry {
 	entry, err := gtk.EntryNew()
 	if err != nil {
 		log.Fatal("Unable to create label:", err)
@@ -63,92 +63,97 @@ func setup_entry() *gtk.Entry {
 	return entry
 }
 
-func setup_gui() {
-	win := setup_window("Money Care")
-	fixed := setup_fixed()
-	fixedSignIn := setup_fixed()
-	fixedSignUp := setup_fixed()
-	fixedFood := setup_fixed()
-	fixedChem := setup_fixed()
-	fixedClo := setup_fixed()
-	fixedOth := setup_fixed()
-	fixedBills := setup_fixed()
+func setupGui() {
+	win := setupWindow("Money Care")
+	fixed := setupFixed()
+	fixedSignIn := setupFixed()
+	fixedSignUp := setupFixed()
+	fixedFood := setupFixed()
+	fixedChem := setupFixed()
+	fixedClo := setupFixed()
+	fixedOth := setupFixed()
+	fixedBills := setupFixed()
 
-	popupSignIn := setup_popup(150, 120, "SignIn")
-	popupSignUp := setup_popup(150, 120, "SignUp")
-	popupFood := setup_popup(150, 120, "Food")
-	popupChem := setup_popup(150, 120, "Chem")
-	popupOth := setup_popup(150, 120, "Other")
-	popupClo := setup_popup(150, 120, "Clothes")
-	popupBills := setup_popup(150, 120, "Bills")
+	popupSignIn := setupPopup(150, 120, "SignIn")
+	popupSignUp := setupPopup(150, 120, "SignUp")
+	popupFood := setupPopup(150, 120, "Food")
+	popupChem := setupPopup(150, 120, "Chem")
+	popupOth := setupPopup(150, 120, "Other")
+	popupClo := setupPopup(150, 120, "Clothes")
+	popupBills := setupPopup(150, 120, "Bills")
 
-	btSignUp := setup_btn("SIGN UP", func() {
+	btSignUp := setupBtn("SIGN UP", func() {
 		popupSignUp.ShowAll()
 	})
-	btSignIn := setup_btn("SIGN IN", func() {
+	btSignIn := setupBtn("SIGN IN", func() {
 		popupSignIn.ShowAll()
 	})
-	btFood := setup_btn("FOOD", func() {
+	btFood := setupBtn("FOOD", func() {
 		popupFood.ShowAll()
 	})
-	btChem := setup_btn("CHEM/COSM", func() {
+	btChem := setupBtn("CHEM/COSM", func() {
 		popupChem.ShowAll()
 	})
-	btClo := setup_btn("CLOTHES", func() {
+	btClo := setupBtn("CLOTHES", func() {
 		popupClo.ShowAll()
 	})
-	btBill := setup_btn("BILLS", func() {
+	btBill := setupBtn("BILLS", func() {
 		popupBills.ShowAll()
 	})
-	btOth := setup_btn("OTHER", func() {
+	btOth := setupBtn("OTHER", func() {
 		popupOth.ShowAll()
 	})
 
-	labBalance := setup_label("Potrosili ste : 0 RSD")
-	labUpId := setup_label("ID: ")
-	labUpIncome := setup_label("PRIHODI: ")
-	labUpOutgoings := setup_label("RASHODI: ")
-	labUpGoal := setup_label("CILJ: ")
-	labFood := setup_label("Unesite iznos u dinarima: ")
-	labChem := setup_label("Unesite iznos u dinarima: ")
-	labOth := setup_label("Unesite iznos u dinarima: ")
-	labClo := setup_label("Unesite iznos u dinarima: ")
-	labBills := setup_label("Unesite iznos u dinarima: ")
+	labBalance := setupLabel("Potrosili ste : 0 RSD")
+	labUpID := setupLabel("ID: ")
+	labUpIncome := setupLabel("PRIHODI: ")
+	labUpOutgoings := setupLabel("RASHODI: ")
+	labUpGoal := setupLabel("CILJ: ")
+	labFood := setupLabel("Unesite iznos u dinarima: ")
+	labChem := setupLabel("Unesite iznos u dinarima: ")
+	labOth := setupLabel("Unesite iznos u dinarima: ")
+	labClo := setupLabel("Unesite iznos u dinarima: ")
+	labBills := setupLabel("Unesite iznos u dinarima: ")
 
-	entry := setup_entry()
-	entryIn := setup_entry()
-	entryUpId := setup_entry()
-	entryUpOutgoings := setup_entry()
-	entryUpIncome := setup_entry()
-	entryUpGoal := setup_entry()
-	entryFood := setup_entry()
-	entryChem := setup_entry()
-	entryOth := setup_entry()
-	entryClo := setup_entry()
-	entryBills := setup_entry()
+	entry := setupEntry()
+	entryIn := setupEntry()
+	entryUpID := setupEntry()
+	entryUpOutgoings := setupEntry()
+	entryUpIncome := setupEntry()
+	entryUpGoal := setupEntry()
+	entryFood := setupEntry()
+	entryChem := setupEntry()
+	entryOth := setupEntry()
+	entryClo := setupEntry()
+	entryBills := setupEntry()
 
-	btSignUpOK := setup_btn("OK", func() {
+	btSignUpOK := setupBtn("OK", func() {
 		userService := admin.UserService
-		userService.InsertFromEntry(entryUpId, entryUpGoal, entryUpIncome, entryUpOutgoings)
-
+		userService.InsertFromEntry(entryUpID, entryUpGoal, entryUpIncome, entryUpOutgoings)
+		popupSignUp.Hide()
 	})
 
-	btSignInOK := setup_btn("OK", func() {
+	btSignInOK := setupBtn("OK", func() {
+		//userService := admin.UserService
+		//user, err := userService.FindOneFromEntry(entryIn)
+		//if err != nil{
+		//	panic(err)
+		//}
 
 	})
-	btFoodOK := setup_btn("OK", func() {
+	btFoodOK := setupBtn("OK", func() {
 		popupFood.Hide()
 	})
-	btChemOK := setup_btn("OK", func() {
+	btChemOK := setupBtn("OK", func() {
 		popupChem.Hide()
 	})
-	btCloOK := setup_btn("OK", func() {
+	btCloOK := setupBtn("OK", func() {
 		popupClo.Hide()
 	})
-	btOthOK := setup_btn("OK", func() {
+	btOthOK := setupBtn("OK", func() {
 		popupOth.Hide()
 	})
-	btBillsOK := setup_btn("OK", func() {
+	btBillsOK := setupBtn("OK", func() {
 		popupBills.Hide()
 	})
 
@@ -206,11 +211,11 @@ func setup_gui() {
 	fixedSignIn.Put(btSignInOK, 10, 70)
 	fixedSignIn.Put(entryIn, 0, 30)
 
-	fixedSignUp.Put(entryUpId, 100, 10)
+	fixedSignUp.Put(entryUpID, 100, 10)
 	fixedSignUp.Put(entryUpIncome, 100, 50)
 	fixedSignUp.Put(entryUpOutgoings, 100, 90)
 	fixedSignUp.Put(entryUpGoal, 100, 130)
-	fixedSignUp.Put(labUpId, 0, 10)
+	fixedSignUp.Put(labUpID, 0, 10)
 	fixedSignUp.Put(labUpIncome, 0, 50)
 	fixedSignUp.Put(labUpOutgoings, 0, 90)
 	fixedSignUp.Put(labUpGoal, 0, 130)

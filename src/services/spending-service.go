@@ -22,8 +22,8 @@ func NewSpendingService(connection *db.Connection, collectionName string) *Spend
 	return &spendingService
 }
 
-func (spendingService *SpendingService) InsertOne(userId primitive.ObjectID, categoryId primitive.ObjectID, amount int) (*mongo.InsertOneResult, error) {
-	spending := models.Spending{UserId: userId, CategoryId: categoryId, Amount: float64(amount)}
+func (spendingService *SpendingService) InsertOne(userID primitive.ObjectID, categoryId primitive.ObjectID, amount int) (*mongo.InsertOneResult, error) {
+	spending := models.Spending{UserID: userID, CategoryID: categoryId, Amount: float64(amount)}
 	res, err := spendingService.spendingCollection.InsertOne(*spendingService.ctx, spending)
 	return res, err
 }

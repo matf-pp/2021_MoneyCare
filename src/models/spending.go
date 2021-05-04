@@ -7,9 +7,9 @@ import (
 
 type Spending struct {
 	ID         primitive.ObjectID `bson:"_id,omitempty"`
-	UserId     primitive.ObjectID `bson:"userId,omitempty"`
+	UserID     primitive.ObjectID `bson:"userId,omitempty"`
 	Username   string             `bson:"username,omitempty"`
-	CategoryId primitive.ObjectID `bson:"categoryId,omitempty"`
+	CategoryID primitive.ObjectID `bson:"categoryId,omitempty"`
 	Amount     float64            `bson:"amount,omitempty"`
 	Time       time.Time          `bson:"time,omitempty"`
 }
