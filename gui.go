@@ -1,4 +1,4 @@
-package main
+package admin
 
 import (
 	"github.com/gotk3/gotk3/gtk"
@@ -48,7 +48,6 @@ func setup_fixed() *gtk.Fixed {
 
 func setup_gui() {
 	win := setup_window("Money Care")
-
 	fixed := setup_fixed()
 	fixedSignIn := setup_fixed()
 	fixedSignUp := setup_fixed()

@@ -1,13 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"main/src/db"
 	"main/src/services"
+	_ "main/src/services"
 	"math/rand"
 	"time"
 )
 
+var categorynamestonumbers map[int]string
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 var users_id [90]string
 var rnorm_values [30]int
@@ -24,7 +25,6 @@ func init() {
 	categoryCollectionName = "categories"
 	spendingCollectionName = "spending"
 	rand.Seed(time.Now().UnixNano())
-
 }
 
 func RandStringRunes(n int) string {
@@ -57,102 +57,56 @@ func main() {
 	categoryService := services.NewCategoryService(connection, categoryCollectionName)
 	spendingService := services.NewSpendingService(connection, spendingCollectionName)
 
-	getNormDistro(30, 25000, 1000)
-	for i := 1; i < 30; i++ {
-		users_id[i] = RandStringRunes(5)
-		_, err := userService.InsertOne(users_id[i])
-		if err != nil {
-			panic(err)
+	categorynamestonumbers[0] = "food"
+	categorynamestonumbers[1] = "chem"
+	categorynamestonumbers[2] = "other"
+	categorynamestonumbers[3] = "clothes"
+	categorynamestonumbers[4] = "bills"
+
+	for j := 0; j < 5; j++ {
+		getNormDistro(30, 10000, 2000)
+		users_id[j] = RandStringRunes(6)
+		userService.InsertOne(users_id[j])
+		iduser, _ := userService.FindOne(users_id[j])
+		for k := 0; k < 5; k++ {
+			idcategory, err := categoryService.FindOne(categorynamestonumbers[k])
+			if err != nil {
+				panic(err)
+			}
+			for i := 0; i < 30; i++ {
+				spendingService.InsertOne(iduser.ID, idcategory.ID, rnorm_values[i]/30)
+			}
 		}
 	}
 
-	for i := 1; i < 30; i++ {
-		userId, err := userService.FindOne(users_id[i])
-		if err != nil {
-			panic(err)
-		}
-		categoryId, err := categoryService.FindOne("food")
-		if err != nil {
-			panic(err)
-		}
-
-		_, err = spendingService.InsertOne(userId.ID, categoryId.ID, rnorm_values[i]/30)
-	}
-
-	getNormDistro(30, 50000, 1000)
-	for i := 30; i < 60; i++ {
-		users_id[i] = RandStringRunes(5)
-		_, err := userService.InsertOne(users_id[i])
-		if err != nil {
-			panic(err)
+	for j := 0; j < 5; j++ {
+		getNormDistro(30, 30000, 10000)
+		users_id[j] = RandStringRunes(6)
+		userService.InsertOne(users_id[j])
+		iduser, _ := userService.FindOne(users_id[j])
+		for k := 0; k < 5; k++ {
+			idcategory, err := categoryService.FindOne(categorynamestonumbers[k])
+			if err != nil {
+				panic(err)
+			}
+			for i := 0; i < 30; i++ {
+				spendingService.InsertOne(iduser.ID, idcategory.ID, rnorm_values[i]/30)
+			}
 		}
 	}
-	j := 0
-	for i := 30; i < 60; i++ {
-		userId, err := userService.FindOne(users_id[i])
-		if err != nil {
-			panic(err)
-		}
-		categoryId, err := categoryService.FindOne("food")
-		if err != nil {
-			panic(err)
-		}
-
-		spendingService.InsertOne(userId.ID, categoryId.ID, rnorm_values[j]/30)
-		j++
-	}
-
-	getNormDistro(30, 10000, 1000)
-	for i := 60; i < 90; i++ {
-		users_id[i] = RandStringRunes(5)
-		_, err := userService.InsertOne(users_id[i])
-		if err != nil {
-			panic(err)
+	for j := 0; j < 5; j++ {
+		getNormDistro(30, 50000, 10000)
+		users_id[j] = RandStringRunes(6)
+		userService.InsertOne(users_id[j])
+		iduser, _ := userService.FindOne(users_id[j])
+		for k := 0; k < 5; k++ {
+			idcategory, err := categoryService.FindOne(categorynamestonumbers[k])
+			if err != nil {
+				panic(err)
+			}
+			for i := 0; i < 30; i++ {
+				spendingService.InsertOne(iduser.ID, idcategory.ID, rnorm_values[i]/30)
+			}
 		}
 	}
-	j = 0
-	for i := 60; i < 90; i++ {
-		userId, err := userService.FindOne(users_id[i])
-		if err != nil {
-			panic(err)
-		}
-		categoryId, err := categoryService.FindOne("food")
-		if err != nil {
-			panic(err)
-		}
-
-		spendingService.InsertOne(userId.ID, categoryId.ID, rnorm_values[j]/30)
-		j++
-	}
-
-	id, err := userService.FindOne("aqEVb")
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(id.ID)
-	spendingService.FindUsersSpending(id.ID)
-
-	for i := 0; i < 2; i++ {
-
-	}
-
 }
-
-type ProductModel struct {
-}
-
-//func (this ProductModel) SumQuantities() (float64, error) {
-//
-//		pipeline := []bson.M{
-//			{
-//				"$group": bson.M{
-//					"_id":   "",
-//					"total": bson.M{"$sum": "$quantity"},
-//				},
-//			},
-//		}
-//		result := []bson.M{}
-//		err = db.Connection("product").Pipe(pipeline).All(&result)
-//		return result[0]["total"].(float64), nil
-//
-//}
