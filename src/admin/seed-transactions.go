@@ -1,4 +1,4 @@
-package admin
+package main
 
 import (
 	"main/src/db"
@@ -9,17 +9,13 @@ import (
 )
 
 var letterRunes = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
-var usersID [90]string
-var rnormValues [30]int
+var users_id [90]string
+var rnorm_values [30]int
 var connectionString string
 var databaseName string
 var userCollectionName string
 var categoryCollectionName string
 var spendingCollectionName string
-
-var UserService *services.UserService
-var SpendingService *services.SpendingService
-var CategoryService *services.CategoryService
 
 func init() {
 	connectionString = "mongodb://localhost:27017"
@@ -40,7 +36,7 @@ func RandStringRunes(n int) string {
 
 func getNormDistro(x int, mi float32, sigma float32) {
 	for i := 0; i < x; i++ {
-		rnormValues[i] = int(normalInverse(mi, sigma))
+		rnorm_values[i] = int(normalInverse(mi, sigma))
 	}
 }
 
@@ -48,17 +44,17 @@ func normalInverse(mu float32, sigma float32) float32 {
 	return float32(rand.NormFloat64()*float64(sigma) + float64(mu))
 }
 
-func SetupSeed() {
+func main() {
 	connection, err := db.NewConnection(connectionString, databaseName)
 	if err != nil {
 		panic(err)
 	}
 
-	//defer connection.Disconnect()
+	defer connection.Disconnect()
 
-	UserService = services.NewUserService(connection, userCollectionName)
-	CategoryService = services.NewCategoryService(connection, categoryCollectionName)
-	SpendingService = services.NewSpendingService(connection, spendingCollectionName)
+	userService := services.NewUserService(connection, userCollectionName)
+	categoryService := services.NewCategoryService(connection, categoryCollectionName)
+	spendingService := services.NewSpendingService(connection, spendingCollectionName)
 	categorynamestonumbers := make(map[int]string)
 	categorynamestonumbers[0] = "food"
 	categorynamestonumbers[1] = "chem"
@@ -66,50 +62,50 @@ func SetupSeed() {
 	categorynamestonumbers[3] = "clothes"
 	categorynamestonumbers[4] = "bills"
 
-	//for j := 0; j < 5; j++ {
-	//	getNormDistro(30, 10000, 3000)
-	//	usersID[j] = RandStringRunes(6)
-	//	UserService.InsertOne(usersID[j], 0, 50000, 0)
-	//	iduser, _ := UserService.FindOne(usersID[j])
-	//	for k := 0; k < 5; k++ {
-	//		idcategory, err := CategoryService.FindOne(categorynamestonumbers[k])
-	//		if err != nil {
-	//			panic(err)
-	//		}
-	//		for i := 0; i < 30; i++ {
-	//			SpendingService.InsertOne(iduser.ID, idcategory.ID, rnormValues[i]/30)
-	//		}
-	//	}
-	//}
+	for j := 0; j < 5; j++ {
+		getNormDistro(30, 10000, 3000)
+		users_id[j] = RandStringRunes(6)
+		userService.InsertOne(users_id[j], 0, 50000, 0)
+		iduser, _ := userService.FindOne(users_id[j])
+		for k := 0; k < 5; k++ {
+			idcategory, err := categoryService.FindOne(categorynamestonumbers[k])
+			if err != nil {
+				panic(err)
+			}
+			for i := 0; i < 30; i++ {
+				spendingService.InsertOne(iduser.ID, idcategory.ID, float64(rnorm_values[i]/30))
+			}
+		}
+	}
 
-	//for j := 0; j < 5; j++ {
-	//	getNormDistro(30, 30000, 2000)
-	//	usersID[j] = RandStringRunes(6)
-	//	UserService.InsertOne(usersID[j], 0, 150000, 0)
-	//	iduser, _ := UserService.FindOne(usersID[j])
-	//	for k := 0; k < 5; k++ {
-	//		idcategory, err := CategoryService.FindOne(categorynamestonumbers[k])
-	//		if err != nil {
-	//			panic(err)
-	//		}
-	//		for i := 0; i < 30; i++ {
-	//			SpendingService.InsertOne(iduser.ID, idcategory.ID, rnormValues[i]/30)
-	//		}
-	//	}
-	//}
-	//for j := 0; j < 5; j++ {
-	//	getNormDistro(30, 50000, 10000)
-	//	usersID[j] = RandStringRunes(6)
-	//	UserService.InsertOne(usersID[j], 0, 250000, 0)
-	//	iduser, _ := UserService.FindOne(usersID[j])
-	//	for k := 0; k < 5; k++ {
-	//		idcategory, err := CategoryService.FindOne(categorynamestonumbers[k])
-	//		if err != nil {
-	//			panic(err)
-	//		}
-	//		for i := 0; i < 30; i++ {
-	//			SpendingService.InsertOne(iduser.ID, idcategory.ID, rnormValues[i]/30)
-	//		}
-	//	}
-	//}
+	for j := 0; j < 5; j++ {
+		getNormDistro(30, 30000, 2000)
+		users_id[j] = RandStringRunes(6)
+		userService.InsertOne(users_id[j], 0, 150000, 0)
+		iduser, _ := userService.FindOne(users_id[j])
+		for k := 0; k < 5; k++ {
+			idcategory, err := categoryService.FindOne(categorynamestonumbers[k])
+			if err != nil {
+				panic(err)
+			}
+			for i := 0; i < 30; i++ {
+				spendingService.InsertOne(iduser.ID, idcategory.ID, float64(rnorm_values[i]/30))
+			}
+		}
+	}
+	for j := 0; j < 5; j++ {
+		getNormDistro(30, 50000, 10000)
+		users_id[j] = RandStringRunes(6)
+		userService.InsertOne(users_id[j], 0, 250000, 0)
+		iduser, _ := userService.FindOne(users_id[j])
+		for k := 0; k < 5; k++ {
+			idcategory, err := categoryService.FindOne(categorynamestonumbers[k])
+			if err != nil {
+				panic(err)
+			}
+			for i := 0; i < 30; i++ {
+				spendingService.InsertOne(iduser.ID, idcategory.ID, float64(rnorm_values[i]/30))
+			}
+		}
+	}
 }
