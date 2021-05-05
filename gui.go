@@ -15,9 +15,15 @@ import (
 
 var EntryUpIncomeAmount int = -1
 var CurrentUserMean map[string]float64 = make(map[string]float64)
-var Username string
+var Username string = ""
 var UserID primitive.ObjectID
 var UserMonth time.Month = time.Now().Month()
+var UserTime time.Time = time.Now()
+
+var ImgPie *gtk.Image
+var ImgGraph *gtk.Image
+
+
 
 func init() {
 	EntryUpIncomeAmount = -1
@@ -46,45 +52,45 @@ func SetCurrentUserMean()  {
 	}
 	var xs [30]float64
 
-	idfood, _ := admin.CategoryService.FindOne("food")
-	idclot, _ := admin.CategoryService.FindOne("clothes")
-	idchem, _ := admin.CategoryService.FindOne("chem")
-	idother, _ := admin.CategoryService.FindOne("other")
-	idbills, _ := admin.CategoryService.FindOne("bills")
+	idFood, _ := admin.CategoryService.FindOne("food")
+	idClot, _ := admin.CategoryService.FindOne("clothes")
+	idChem, _ := admin.CategoryService.FindOne("chem")
+	idOther, _ := admin.CategoryService.FindOne("other")
+	idBills, _ := admin.CategoryService.FindOne("bills")
 
 	if currentUser == 0 {
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idFood.ID)
 		}
 
 		CurrentUserMean["food"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idClot.ID)
 		}
 
 		CurrentUserMean["clothes"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idChem.ID)
 		}
 
 		CurrentUserMean["chem"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idBills.ID)
 		}
 
 		CurrentUserMean["bills"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idOther.ID)
 		}
 
 		CurrentUserMean["other"] = mean(xs)
@@ -95,7 +101,7 @@ func SetCurrentUserMean()  {
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idFood.ID)
 		}
 
 		CurrentUserMean["food"] = mean(xs)
@@ -104,28 +110,28 @@ func SetCurrentUserMean()  {
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idClot.ID)
 		}
 
 		CurrentUserMean["clothes"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idChem.ID)
 		}
 
 		CurrentUserMean["chem"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idBills.ID)
 		}
 
 		CurrentUserMean["bills"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idOther.ID)
 		}
 
 		CurrentUserMean["other"] = mean(xs)
@@ -133,40 +139,39 @@ func SetCurrentUserMean()  {
 	}
 
 	if currentUser == 2 {
-		fmt.Println("caos")
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idFood.ID)
 		}
 
 		CurrentUserMean["food"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idClot.ID)
 		}
 
 		CurrentUserMean["clothes"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idChem.ID)
 		}
 
 		CurrentUserMean["chem"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idBills.ID)
 		}
 
 		CurrentUserMean["bills"] = mean(xs)
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
+			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idOther.ID)
 		}
 
-		CurrentUserMean["otherr"] = mean(xs)
+		CurrentUserMean["other"] = mean(xs)
 
 	}
 
@@ -227,6 +232,7 @@ func showBalanceByCat(service *services.SpendingService, label *gtk.Label, pb *g
 	total := us.Income
 	x := (100.00 * spent / total) / 100.00
 	pb.SetFraction(x)
+	pb.se
 }
 
 func showBalanceForAll(labelAll *gtk.Label, labelFood *gtk.Label, labelClothes *gtk.Label, labelChem *gtk.Label, labelOther *gtk.Label, labelBills *gtk.Label, pbAll *gtk.ProgressBar, pbFood *gtk.ProgressBar, pbClothes *gtk.ProgressBar, pbChem *gtk.ProgressBar, pbOther *gtk.ProgressBar, pbBills *gtk.ProgressBar) {
@@ -304,6 +310,10 @@ func setupProgressBar() *gtk.ProgressBar {
 	return pb
 }
 
+func showUsername(uname string, label *gtk.Label){
+	label.SetText(uname)
+}
+
 func SetupGui() {
 
 	cal, err := gtk.CalendarNew()
@@ -341,38 +351,142 @@ func SetupGui() {
 		popupSignIn.ShowAll()
 	})
 	btFood := setupBtn("FOOD", func() {
-		popupFood.ShowAll()
+		if Username=="" {
+			dial, err := gtk.DialogNew()
+			if err!=nil {
+				panic(err)
+			}
+			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
+			dial.SetTitle("Uloguj se")
+			dial.Show()
+		}else {
+			popupFood.ShowAll()
+		}
 	})
 	btChem := setupBtn("CHEM/COSM", func() {
-		popupChem.ShowAll()
+		if Username=="" {
+			dial, err := gtk.DialogNew()
+			if err!=nil {
+				panic(err)
+			}
+			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
+			dial.SetTitle("Uloguj se")
+			dial.Show()
+		}else {
+			popupChem.ShowAll()
+		}
 	})
 	btClo := setupBtn("CLOTHES", func() {
-		popupClo.ShowAll()
+		if Username=="" {
+			dial, err := gtk.DialogNew()
+			if err!=nil {
+				panic(err)
+			}
+			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
+			dial.SetTitle("Uloguj se")
+			dial.Show()
+		}else {
+			popupClo.ShowAll()
+		}
 	})
 	btBill := setupBtn("BILLS", func() {
-		popupBills.ShowAll()
+		if Username=="" {
+			dial, err := gtk.DialogNew()
+			if err!=nil {
+				panic(err)
+			}
+			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
+			dial.SetTitle("Uloguj se")
+			dial.Show()
+		}else {
+			popupBills.ShowAll()
+		}
 	})
 	btOth := setupBtn("OTHER", func() {
-		popupOth.ShowAll()
+		if Username=="" {
+			dial, err := gtk.DialogNew()
+			if err!=nil {
+				panic(err)
+			}
+			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
+			dial.SetTitle("Uloguj se")
+			dial.Show()
+		}else {
+			popupOth.ShowAll()
+		}
 	})
 	btHist := setupBtn("HISTOGRAM", func() {
+		if Username=="" {
+			dial, err := gtk.DialogNew()
+			if err!=nil {
+				panic(err)
+			}
+			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
+			dial.SetTitle("Uloguj se")
+			dial.Show()
+		}else {
+		}
 
 	})
+
+
+
 	//TODO: mozda da se azurira slika na svako dodavanje odmah, ako stignem
 	btPieChart := setupBtn("PIECHART", func() {
-		plots.PieChart(UserID, UserMonth)
-		imgGraph, err := gtk.ImageNewFromFile("output.png")
-		if err != nil {
-			panic(err)
+
+		if Username=="" {
+			dial, err := gtk.DialogNew()
+			if err!=nil {
+				panic(err)
+			}
+			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
+			dial.SetTitle("Uloguj se")
+			dial.Show()
+		}else {
+			if ImgPie != nil && ImgPie.IsVisible() {
+				ImgPie.Hide()
+			}
+			plots.PieChart(UserID, UserMonth)
+			ImgPie, err = gtk.ImageNewFromFile("piechart.png")
+			if err != nil {
+				panic(err)
+			}
+			fixed.Put(ImgPie, 441, 60)
+			if ImgGraph != nil && ImgGraph.IsVisible() {
+				ImgGraph.Hide()
+			}
+			ImgPie.Show()
 		}
-		fixed.Put(imgGraph, 441, 60)
-		imgGraph.Show()
 	})
 
 	btGraph := setupBtn("GRAPH", func() {
-		plots.DrawChart(UserID, time.Now())
-
+		if Username=="" {
+			dial, err := gtk.DialogNew()
+			if err!=nil {
+				panic(err)
+			}
+			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
+			dial.SetTitle("Uloguj se")
+			dial.Show()
+		}else {
+			if ImgGraph != nil && ImgGraph.IsVisible() {
+				ImgGraph.Hide()
+			}
+			plots.DrawChart(UserID, UserTime)
+			ImgGraph, err = gtk.ImageNewFromFile("graph.png")
+			if err != nil {
+				panic(err)
+			}
+			fixed.Put(ImgGraph, 441, 60)
+			if ImgPie != nil && ImgPie.IsVisible() {
+				ImgPie.Hide()
+			}
+			ImgGraph.Show()
+		}
 	})
+
+
+
 
 	labBalance := setupLabel("balance")
 	labelFoodEx := setupLabel("balance")
@@ -390,6 +504,8 @@ func SetupGui() {
 	labOth := setupLabel("Unesite iznos u dinarima: ")
 	labClo := setupLabel("Unesite iznos u dinarima: ")
 	labBills := setupLabel("Unesite iznos u dinarima: ")
+
+	labUsername := setupLabel("USERNAME")
 
 	pbFood := setupProgressBar()
 	pbChem := setupProgressBar()
@@ -438,6 +554,8 @@ func SetupGui() {
 		user, err := userService.FindOne(uname)
 		UserID = user.ID
 
+		showUsername(Username, labUsername)
+
 		EntryUpIncomeAmount = int(user.Income)
 		SetCurrentUserMean()
 
@@ -446,11 +564,14 @@ func SetupGui() {
 		//y, d, m := cal.GetDate()
 		popupSignIn.Hide()
 	})
+
 	btFoodOK := setupBtn("OK", func() {
-		addSpending("food", entryFood)
-		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
-		showWarning("food", 100.00, popupWarning)
-		popupFood.Hide()
+
+			addSpending("food", entryFood)
+			showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
+			showWarning("food", 100.00, popupWarning)
+			popupFood.Hide()
+
 	})
 	btChemOK := setupBtn("OK", func() {
 		addSpending("chem", entryChem)
@@ -506,9 +627,21 @@ func SetupGui() {
 	})
 
 	btCalOK := setupBtn("OK", func() {
-		_, m, _ := cal.GetDate()
-		UserMonth = time.Month(m + 1)
-		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
+		if Username=="" {
+			dial, err := gtk.DialogNew()
+			if err!=nil {
+				panic(err)
+			}
+			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
+			dial.SetTitle("Uloguj se")
+			dial.Show()
+		}else {
+			y, m, d := cal.GetDate()
+			UserTime = time.Date(int(y), time.Month(m+1), int(d), 12, 12, 12, 12, time.Local)
+			fmt.Println(UserTime)
+			UserMonth = time.Month(m + 1)
+			showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
+		}
 	})
 
 	fixed.Put(labelFoodEx, 250, 100)
@@ -539,6 +672,8 @@ func SetupGui() {
 	fixed.Put(btCalOK, 600, 450)
 
 	fixed.Put(labBalance, 450, 450)
+
+	fixed.Put(labUsername, 250, 15)
 	//fixed.Put(entry, 335, 380)
 	//fixed.Put(popupIn,12,30)
 
