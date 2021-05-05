@@ -13,17 +13,15 @@ import (
 	"time"
 )
 
-var EntryUpIncomeAmount int = -1
-var CurrentUserMean map[string]float64 = make(map[string]float64)
-var Username string = ""
+var EntryUpIncomeAmount = -1
+var CurrentUserMean = make(map[string]float64)
+var Username string
 var UserID primitive.ObjectID
 var UserMonth time.Month = time.Now().Month()
 var UserTime time.Time = time.Now()
 
 var ImgPie *gtk.Image
 var ImgGraph *gtk.Image
-
-
 
 func init() {
 	EntryUpIncomeAmount = -1
@@ -37,7 +35,7 @@ func mean(xs [30]float64) float64 {
 	return total / float64(5)
 }
 
-func SetCurrentUserMean()  {
+func SetCurrentUserMean() {
 	var currentUser int
 	if EntryUpIncomeAmount != -1 {
 		if EntryUpIncomeAmount <= 50000 {
@@ -179,12 +177,12 @@ func SetCurrentUserMean()  {
 
 func addSpending(cat string, entry *gtk.Entry) {
 	categoryService := admin.CategoryService
-	categoryId, err := categoryService.FindOne(cat)
+	categoryID, err := categoryService.FindOne(cat)
 	if err != nil {
 		panic(err)
 	}
 	spendingService := admin.SpendingService
-	spendingService.InsertFromEntry(UserID, categoryId.ID, entry)
+	spendingService.InsertFromEntry(UserID, categoryID.ID, entry)
 }
 
 func showWarning(cat string, eps float64, popup *gtk.Window) {
@@ -309,7 +307,7 @@ func setupProgressBar() *gtk.ProgressBar {
 	return pb
 }
 
-func showUsername(uname string, label *gtk.Label){
+func showUsername(uname string, label *gtk.Label) {
 	label.SetText(uname)
 }
 
@@ -350,98 +348,95 @@ func SetupGui() {
 		popupSignIn.ShowAll()
 	})
 	btFood := setupBtn("FOOD", func() {
-		if Username=="" {
+		if Username == "" {
 			dial, err := gtk.DialogNew()
-			if err!=nil {
+			if err != nil {
 				panic(err)
 			}
 			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
 			dial.SetTitle("Uloguj se")
 			dial.Show()
-		}else {
+		} else {
 			popupFood.ShowAll()
 		}
 	})
 	btChem := setupBtn("CHEM/COSM", func() {
-		if Username=="" {
+		if Username == "" {
 			dial, err := gtk.DialogNew()
-			if err!=nil {
+			if err != nil {
 				panic(err)
 			}
 			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
 			dial.SetTitle("Uloguj se")
 			dial.Show()
-		}else {
+		} else {
 			popupChem.ShowAll()
 		}
 	})
 	btClo := setupBtn("CLOTHES", func() {
-		if Username=="" {
+		if Username == "" {
 			dial, err := gtk.DialogNew()
-			if err!=nil {
+			if err != nil {
 				panic(err)
 			}
 			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
 			dial.SetTitle("Uloguj se")
 			dial.Show()
-		}else {
+		} else {
 			popupClo.ShowAll()
 		}
 	})
 	btBill := setupBtn("BILLS", func() {
-		if Username=="" {
+		if Username == "" {
 			dial, err := gtk.DialogNew()
-			if err!=nil {
+			if err != nil {
 				panic(err)
 			}
 			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
 			dial.SetTitle("Uloguj se")
 			dial.Show()
-		}else {
+		} else {
 			popupBills.ShowAll()
 		}
 	})
 	btOth := setupBtn("OTHER", func() {
-		if Username=="" {
+		if Username == "" {
 			dial, err := gtk.DialogNew()
-			if err!=nil {
+			if err != nil {
 				panic(err)
 			}
 			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
 			dial.SetTitle("Uloguj se")
 			dial.Show()
-		}else {
+		} else {
 			popupOth.ShowAll()
 		}
 	})
 	btHist := setupBtn("HISTOGRAM", func() {
-		if Username=="" {
+		if Username == "" {
 			dial, err := gtk.DialogNew()
-			if err!=nil {
+			if err != nil {
 				panic(err)
 			}
 			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
 			dial.SetTitle("Uloguj se")
 			dial.Show()
-		}else {
+		} else {
 		}
 
 	})
 
-
-
-	//TODO: mozda da se azurira slika na svako dodavanje odmah, ako stignem
 	btPieChart := setupBtn("PIECHART", func() {
 
-		if Username=="" {
+		if Username == "" {
 			dial, err := gtk.DialogNew()
-			if err!=nil {
+			if err != nil {
 				panic(err)
 			}
 			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
 			dial.SetTitle("Uloguj se")
 			dial.Show()
-		}else {
+		} else {
 			if ImgPie != nil && ImgPie.IsVisible() {
 				ImgPie.Hide()
 			}
@@ -459,15 +454,15 @@ func SetupGui() {
 	})
 
 	btGraph := setupBtn("GRAPH", func() {
-		if Username=="" {
+		if Username == "" {
 			dial, err := gtk.DialogNew()
-			if err!=nil {
+			if err != nil {
 				panic(err)
 			}
 			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
 			dial.SetTitle("Uloguj se")
 			dial.Show()
-		}else {
+		} else {
 			if ImgGraph != nil && ImgGraph.IsVisible() {
 				ImgGraph.Hide()
 			}
@@ -483,9 +478,6 @@ func SetupGui() {
 			ImgGraph.Show()
 		}
 	})
-
-
-
 
 	labBalance := setupLabel("balance")
 	labelFoodEx := setupLabel("balance")
@@ -566,10 +558,10 @@ func SetupGui() {
 
 	btFoodOK := setupBtn("OK", func() {
 
-			addSpending("food", entryFood)
-			showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
-			showWarning("food", 100.00, popupWarning)
-			popupFood.Hide()
+		addSpending("food", entryFood)
+		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
+		showWarning("food", 100.00, popupWarning)
+		popupFood.Hide()
 
 	})
 	btChemOK := setupBtn("OK", func() {
@@ -626,15 +618,15 @@ func SetupGui() {
 	})
 
 	btCalOK := setupBtn("OK", func() {
-		if Username=="" {
+		if Username == "" {
 			dial, err := gtk.DialogNew()
-			if err!=nil {
+			if err != nil {
 				panic(err)
 			}
 			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
 			dial.SetTitle("Uloguj se")
 			dial.Show()
-		}else {
+		} else {
 			y, m, d := cal.GetDate()
 			UserTime = time.Date(int(y), time.Month(m+1), int(d), 12, 12, 12, 12, time.Local)
 			fmt.Println(UserTime)
