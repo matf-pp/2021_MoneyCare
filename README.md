@@ -5,7 +5,7 @@
 Aplikacija koja prati potrosnju novca i na osnovu toga daje korisniku statisticke proracune,  savete i upozorenja.
 ***
 ## Implementacija
-* Golang: <https://golang.org/doc/install>   
+*   Golang: <https://golang.org/doc/install>   
 * Gtk framework: <https://www.gtk.org/>   
 * <https://github.com/gotk3/gotk3/gtk>  (instalacija na linku)
 * <https://github.com/wcharczuk/go-chart/v2>  (instalacija na linku)
