@@ -11,7 +11,7 @@ func main() {
 
 	admin.SetupSeed()
 	gtk.Init(nil)
-	SetupGui()
+	setupGui()
 	gtk.Main()
 
 }

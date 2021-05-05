@@ -33,7 +33,7 @@ func init() {
 	UsersID0[29] = string(1)
 }
 
-func RandStringRunes(n int) string {
+func randStringRunes(n int) string {
 	b := make([]rune, n)
 	for i := range b {
 		b[i] = letterRunes[rand.Intn(len(letterRunes))]
@@ -73,7 +73,7 @@ func SetupSeed() {
 	categorynamestonumbers[4] = "bills"
 
 	for j := 0; j < 5; j++ {
-		UsersID0[j] = RandStringRunes(6)
+		UsersID0[j] = randStringRunes(6)
 		UserService.InsertOne(UsersID0[j], 0, 50000, 0)
 	}
 	incomeclasses[UsersID0] = 0
@@ -145,7 +145,7 @@ func SetupSeed() {
 	}
 
 	for j := 0; j < 5; j++ {
-		UsersID1[j] = RandStringRunes(6)
+		UsersID1[j] = randStringRunes(6)
 		UserService.InsertOne(UsersID1[j], 0, 70000, 0)
 	}
 	incomeclasses[UsersID1] = 1
@@ -218,7 +218,7 @@ func SetupSeed() {
 	}
 
 	for j := 0; j < 5; j++ {
-		UsersID2[j] = RandStringRunes(6)
+		UsersID2[j] = randStringRunes(6)
 		UserService.InsertOne(UsersID2[j], 0, 150000, 0)
 	}
 	incomeclasses[UsersID2] = 2

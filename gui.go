@@ -14,18 +14,18 @@ import (
 	"time"
 )
 
-var EntryUpIncomeAmount = -1
-var CurrentUserMean = make(map[string]float64)
-var Username string
-var UserID primitive.ObjectID
-var UserMonth = time.Now().Month()
-var UserTime = time.Now()
+var entryUpIncomeAmount = -1
+var currentUserMean = make(map[string]float64)
+var username string
+var userID primitive.ObjectID
+var userMonth = time.Now().Month()
+var userTime = time.Now()
 
-var ImgPie *gtk.Image
-var ImgGraph *gtk.Image
+var imgPie *gtk.Image
+var imgGraph *gtk.Image
 
 func init() {
-	EntryUpIncomeAmount = -1
+	entryUpIncomeAmount = -1
 }
 
 func mean(xs [30]float64) float64 {
@@ -36,16 +36,16 @@ func mean(xs [30]float64) float64 {
 	return total / float64(5)
 }
 
-func SetCurrentUserMean() {
+func setCurrentUserMean() {
 	var currentUser int
-	if EntryUpIncomeAmount != -1 {
-		if EntryUpIncomeAmount <= 50000 {
+	if entryUpIncomeAmount != -1 {
+		if entryUpIncomeAmount <= 50000 {
 			currentUser = 0
 		}
-		if EntryUpIncomeAmount >= 50000 && EntryUpIncomeAmount <= 150000 {
+		if entryUpIncomeAmount >= 50000 && entryUpIncomeAmount <= 150000 {
 			currentUser = 1
 		}
-		if EntryUpIncomeAmount >= 150000 {
+		if entryUpIncomeAmount >= 150000 {
 			currentUser = 2
 		}
 	}
@@ -64,35 +64,35 @@ func SetCurrentUserMean() {
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idFood.ID)
 		}
 
-		CurrentUserMean["food"] = mean(xs)
+		currentUserMean["food"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idClot.ID)
 		}
 
-		CurrentUserMean["clothes"] = mean(xs)
+		currentUserMean["clothes"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idChem.ID)
 		}
 
-		CurrentUserMean["chem"] = mean(xs)
+		currentUserMean["chem"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idBills.ID)
 		}
 
-		CurrentUserMean["bills"] = mean(xs)
+		currentUserMean["bills"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idOther.ID)
 		}
 
-		CurrentUserMean["other"] = mean(xs)
+		currentUserMean["other"] = mean(xs)
 
 	}
 
@@ -103,35 +103,35 @@ func SetCurrentUserMean() {
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idFood.ID)
 		}
 
-		CurrentUserMean["food"] = mean(xs)
+		currentUserMean["food"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idClot.ID)
 		}
 
-		CurrentUserMean["clothes"] = mean(xs)
+		currentUserMean["clothes"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idChem.ID)
 		}
 
-		CurrentUserMean["chem"] = mean(xs)
+		currentUserMean["chem"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idBills.ID)
 		}
 
-		CurrentUserMean["bills"] = mean(xs)
+		currentUserMean["bills"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idOther.ID)
 		}
 
-		CurrentUserMean["other"] = mean(xs)
+		currentUserMean["other"] = mean(xs)
 
 	}
 
@@ -141,45 +141,45 @@ func SetCurrentUserMean() {
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idFood.ID)
 		}
 
-		CurrentUserMean["food"] = mean(xs)
+		currentUserMean["food"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idClot.ID)
 		}
 
-		CurrentUserMean["clothes"] = mean(xs)
+		currentUserMean["clothes"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idChem.ID)
 		}
 
-		CurrentUserMean["chem"] = mean(xs)
+		currentUserMean["chem"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idBills.ID)
 		}
 
-		CurrentUserMean["bills"] = mean(xs)
+		currentUserMean["bills"] = mean(xs)
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idOther.ID)
 		}
 
-		CurrentUserMean["other"] = mean(xs)
+		currentUserMean["other"] = mean(xs)
 	}
 }
 
 func addSpending(cat string, entry *gtk.Entry) {
 	categoryService := admin.CategoryService
-	categoryId, err := categoryService.FindOne(cat)
+	categoryID, err := categoryService.FindOne(cat)
 	if err != nil {
 		panic(err)
 	}
 	spendingService := admin.SpendingService
-	spendingService.InsertFromEntry(UserID, categoryId.ID, entry)
+	spendingService.InsertFromEntry(userID, categoryID.ID, entry)
 }
 
 func showWarning(cat string, eps float64, popup *gtk.Window) {
@@ -190,15 +190,15 @@ func showWarning(cat string, eps float64, popup *gtk.Window) {
 		panic(err)
 	}
 	spendingService := admin.SpendingService
-	s := spendingService.FindUsersSpendingByCategory(UserID, catID.ID)
-	if math.Abs(s-CurrentUserMean[cat]) < eps || s > CurrentUserMean[cat] {
+	s := spendingService.FindUsersSpendingByCategory(userID, catID.ID)
+	if math.Abs(s-currentUserMean[cat]) < eps || s > currentUserMean[cat] {
 		popup.ShowAll()
 	}
 }
 
 func showWarningForGoal(percent float64, popupGoal *gtk.Window) {
 	userService := admin.UserService
-	user, err := userService.FindOne(Username)
+	user, err := userService.FindOne(username)
 	if err != nil {
 		panic(err)
 	}
@@ -206,7 +206,7 @@ func showWarningForGoal(percent float64, popupGoal *gtk.Window) {
 	income := user.Income
 	p := goal * percent / 100.00
 	spendingService := admin.SpendingService
-	spend := spendingService.FindUsersSpending(UserID)
+	spend := spendingService.FindUsersSpending(userID)
 	if spend > (income-goal)-p {
 		popupGoal.ShowAll()
 	}
@@ -214,12 +214,12 @@ func showWarningForGoal(percent float64, popupGoal *gtk.Window) {
 }
 
 func showBalance(service *services.SpendingService, label *gtk.Label, pb *gtk.ProgressBar) {
-	spent := service.FindUsersSpendingByMonth(UserID, UserMonth)
+	spent := service.FindUsersSpendingByMonth(userID, userMonth)
 	s := fmt.Sprint("You've spent : ", spent)
 	label.SetText(s)
 
 	userService := admin.UserService
-	us, err := userService.FindOne(Username)
+	us, err := userService.FindOne(username)
 	if err != nil {
 		panic(err)
 	}
@@ -234,10 +234,10 @@ func showBalanceByCat(service *services.SpendingService, label *gtk.Label, pb *g
 	if err != nil {
 		panic(err)
 	}
-	spent := service.FindUsersSpendingByCategoryByMonth(UserID, catID.ID, UserMonth)
+	spent := service.FindUsersSpendingByCategoryByMonth(userID, catID.ID, userMonth)
 	s := fmt.Sprint("You've spent : ", spent)
 	label.SetText(s)
-	total := CurrentUserMean[cat]
+	total := currentUserMean[cat]
 	x := (100.00 * spent / total) / 100.00
 	pb.SetFraction(x)
 }
@@ -321,7 +321,7 @@ func showUsername(uname string, label *gtk.Label) {
 	label.SetText(uname)
 }
 
-func SetupGui() {
+func setupGui() {
 
 	cal, err := gtk.CalendarNew()
 	if err != nil {
@@ -365,7 +365,7 @@ func SetupGui() {
 		popupSignIn.ShowAll()
 	})
 	btFood := setupBtn("FOOD", func() {
-		if Username == "" {
+		if username == "" {
 			dial, err := gtk.DialogNew()
 			if err != nil {
 				panic(err)
@@ -378,7 +378,7 @@ func SetupGui() {
 		}
 	})
 	btChem := setupBtn("CHEM/COSM", func() {
-		if Username == "" {
+		if username == "" {
 			dial, err := gtk.DialogNew()
 			if err != nil {
 				panic(err)
@@ -391,7 +391,7 @@ func SetupGui() {
 		}
 	})
 	btClo := setupBtn("CLOTHES", func() {
-		if Username == "" {
+		if username == "" {
 			dial, err := gtk.DialogNew()
 			if err != nil {
 				panic(err)
@@ -404,7 +404,7 @@ func SetupGui() {
 		}
 	})
 	btBill := setupBtn("BILLS", func() {
-		if Username == "" {
+		if username == "" {
 			dial, err := gtk.DialogNew()
 			if err != nil {
 				panic(err)
@@ -417,7 +417,7 @@ func SetupGui() {
 		}
 	})
 	btOth := setupBtn("OTHER", func() {
-		if Username == "" {
+		if username == "" {
 			dial, err := gtk.DialogNew()
 			if err != nil {
 				panic(err)
@@ -431,7 +431,7 @@ func SetupGui() {
 	})
 
 	btPieChart := setupBtn("PIECHART", func() {
-		if Username == "" {
+		if username == "" {
 			dial, err := gtk.DialogNew()
 			if err != nil {
 				panic(err)
@@ -440,24 +440,24 @@ func SetupGui() {
 			dial.SetTitle("Please")
 			dial.Show()
 		} else {
-			if ImgPie != nil && ImgPie.IsVisible() {
-				ImgPie.Hide()
+			if imgPie != nil && imgPie.IsVisible() {
+				imgPie.Hide()
 			}
-			plots.PieChart(UserID, UserMonth)
-			ImgPie, err = gtk.ImageNewFromFile("piechart.png")
+			plots.PieChart(userID, userMonth)
+			imgPie, err = gtk.ImageNewFromFile("piechart.png")
 			if err != nil {
 				panic(err)
 			}
-			fixed.Put(ImgPie, 441, 60)
-			if ImgGraph != nil && ImgGraph.IsVisible() {
-				ImgGraph.Hide()
+			fixed.Put(imgPie, 441, 60)
+			if imgGraph != nil && imgGraph.IsVisible() {
+				imgGraph.Hide()
 			}
-			ImgPie.Show()
+			imgPie.Show()
 		}
 	})
 
 	btGraph := setupBtn("GRAPH", func() {
-		if Username == "" {
+		if username == "" {
 			dial, err := gtk.DialogNew()
 			if err != nil {
 				panic(err)
@@ -466,19 +466,19 @@ func SetupGui() {
 			dial.SetTitle("Please")
 			dial.Show()
 		} else {
-			if ImgGraph != nil && ImgGraph.IsVisible() {
-				ImgGraph.Hide()
+			if imgGraph != nil && imgGraph.IsVisible() {
+				imgGraph.Hide()
 			}
-			plots.DrawChart(UserID, UserTime)
-			ImgGraph, err = gtk.ImageNewFromFile("graph.png")
+			plots.DrawChart(userID, userTime)
+			imgGraph, err = gtk.ImageNewFromFile("graph.png")
 			if err != nil {
 				panic(err)
 			}
-			fixed.Put(ImgGraph, 441, 60)
-			if ImgPie != nil && ImgPie.IsVisible() {
-				ImgPie.Hide()
+			fixed.Put(imgGraph, 441, 60)
+			if imgPie != nil && imgPie.IsVisible() {
+				imgPie.Hide()
 			}
-			ImgGraph.Show()
+			imgGraph.Show()
 		}
 	})
 
@@ -522,7 +522,7 @@ func SetupGui() {
 	entryBills := setupEntry()
 
 	btSignUpOK := setupBtn("OK", func() {
-		enId, err := entryUpID.GetText()
+		enID, err := entryUpID.GetText()
 		if err != nil {
 			panic(err)
 		}
@@ -541,11 +541,11 @@ func SetupGui() {
 		}
 
 		userService := admin.UserService
-		us, err := userService.FindOne(enId)
+		us, err := userService.FindOne(enID)
 
 		if err != mongo.ErrNoDocuments {
 			entryUpID.SetText("USERNAME TAKEN")
-		} else if enId == "" {
+		} else if enID == "" {
 			entryUpID.SetText("Enter username")
 		} else if enGoal == "" {
 			entryUpGoal.SetText("Enter goal")
@@ -558,13 +558,13 @@ func SetupGui() {
 			userService.InsertFromEntry(entryUpID, entryUpGoal, entryUpIncome, entryUpOutgoings)
 
 			str, err := entryUpIncome.GetText()
-			EntryUpIncomeAmount, _ = strconv.Atoi(str)
+			entryUpIncomeAmount, _ = strconv.Atoi(str)
 			if err != nil {
 				panic(err)
 			}
-			Username = us.Username
+			username = us.Username
 			user, err := userService.FindOne(us.Username)
-			UserID = user.ID
+			userID = user.ID
 			popupSignUp.Hide()
 		}
 
@@ -582,13 +582,13 @@ func SetupGui() {
 			entryIn.SetText("DOESN'T EXIST")
 		} else {
 
-			Username = uname
-			UserID = user.ID
+			username = uname
+			userID = user.ID
 
-			showUsername(Username, labUsername)
+			showUsername(username, labUsername)
 
-			EntryUpIncomeAmount = int(user.Income)
-			SetCurrentUserMean()
+			entryUpIncomeAmount = int(user.Income)
+			setCurrentUserMean()
 
 			showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
 			popupSignIn.Hide()
@@ -662,7 +662,7 @@ func SetupGui() {
 	})
 
 	btCalOK := setupBtn("OK", func() {
-		if Username == "" {
+		if username == "" {
 			dial, err := gtk.DialogNew()
 			if err != nil {
 				panic(err)
@@ -672,8 +672,8 @@ func SetupGui() {
 			dial.Show()
 		} else {
 			y, m, d := cal.GetDate()
-			UserTime = time.Date(int(y), time.Month(m+1), int(d), 12, 12, 12, 12, time.Local)
-			UserMonth = time.Month(m + 1)
+			userTime = time.Date(int(y), time.Month(m+1), int(d), 12, 12, 12, 12, time.Local)
+			userMonth = time.Month(m + 1)
 			showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
 		}
 	})
