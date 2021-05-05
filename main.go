@@ -1,15 +1,16 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gotk3/gotk3/gtk"
 	_ "go.mongodb.org/mongo-driver/bson/primitive"
 	"main/src/admin"
-	"main/src/gui"
 	_ "main/src/services"
 )
 
 var currentuser int
 var xs [30]float64
+var Currentusermean map[string]float64
 
 func mean(xs [30]float64) float64 {
 	total := 0.0
@@ -31,24 +32,22 @@ func main() {
 
 	admin.SetupSeed()
 	gtk.Init(nil)
-	gui.SetupGui()
+	SetupGui()
 	gtk.Main()
-	//plots.DrawChart()
+	if EntryUpIncomeAmount != -1 {
+		if EntryUpIncomeAmount <= 50000 {
+			currentuser = 0
+		}
+		if EntryUpIncomeAmount >= 50000 && EntryUpIncomeAmount <= 150000 {
+			currentuser = 1
+		}
+		if EntryUpIncomeAmount >= 150000 {
+			currentuser = 2
+		}
 
-	//if EntryUpIncomeAmount != -1 {
-	//	if EntryUpIncomeAmount <= 50000 {
-	//		currentuser = 0
-	//	}
-	//	if EntryUpIncomeAmount >= 50000 && EntryUpIncomeAmount <= 15000 {
-	//		currentuser = 1
-	//	}
-	//	if EntryUpIncomeAmount >= 150000 {
-	//		currentuser = 2
-	//	}
-	//
-	//}
+	}
 
-	currentusermean := make(map[string]float64)
+	Currentusermean = make(map[string]float64)
 	idfood, _ := admin.CategoryService.FindOne("food")
 	idclot, _ := admin.CategoryService.FindOne("clothes")
 	idchem, _ := admin.CategoryService.FindOne("chem")
@@ -62,35 +61,35 @@ func main() {
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
 		}
 
-		currentusermean["food"] = mean(xs)
+		Currentusermean["food"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
 		}
 
-		currentusermean["clothes"] = mean(xs)
+		Currentusermean["clothes"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
 		}
 
-		currentusermean["chem"] = mean(xs)
+		Currentusermean["chem"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
 		}
 
-		currentusermean["bills"] = mean(xs)
+		Currentusermean["bills"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
 		}
 
-		currentusermean["othes"] = mean(xs)
+		Currentusermean["othes"] = mean(xs)
 
 	}
 
@@ -101,74 +100,73 @@ func main() {
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
 		}
 
-		currentusermean["food"] = mean(xs)
+		Currentusermean["food"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
 		}
 
-		currentusermean["clothes"] = mean(xs)
+		Currentusermean["clothes"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
 		}
 
-		currentusermean["chem"] = mean(xs)
+		Currentusermean["chem"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
 		}
 
-		currentusermean["bills"] = mean(xs)
+		Currentusermean["bills"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
 		}
 
-		currentusermean["othes"] = mean(xs)
+		Currentusermean["othes"] = mean(xs)
 
 	}
 
 	if currentuser == 2 {
-
+		fmt.Println("caos")
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
 		}
 
-		currentusermean["food"] = mean(xs)
+		Currentusermean["food"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
 		}
 
-		currentusermean["clothes"] = mean(xs)
+		Currentusermean["clothes"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
 		}
 
-		currentusermean["chem"] = mean(xs)
+		Currentusermean["chem"] = mean(xs)
 
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
 		}
 
-		currentusermean["bills"] = mean(xs)
-
+		Currentusermean["bills"] = mean(xs)
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
 		}
 
-		currentusermean["othes"] = mean(xs)
+		Currentusermean["others"] = mean(xs)
 
 	}
 
