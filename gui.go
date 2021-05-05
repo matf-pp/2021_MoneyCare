@@ -232,7 +232,6 @@ func showBalanceByCat(service *services.SpendingService, label *gtk.Label, pb *g
 	total := us.Income
 	x := (100.00 * spent / total) / 100.00
 	pb.SetFraction(x)
-	pb.se
 }
 
 func showBalanceForAll(labelAll *gtk.Label, labelFood *gtk.Label, labelClothes *gtk.Label, labelChem *gtk.Label, labelOther *gtk.Label, labelBills *gtk.Label, pbAll *gtk.ProgressBar, pbFood *gtk.ProgressBar, pbClothes *gtk.ProgressBar, pbChem *gtk.ProgressBar, pbOther *gtk.ProgressBar, pbBills *gtk.ProgressBar) {
