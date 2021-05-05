@@ -50,7 +50,10 @@ func PieChart(userID primitive.ObjectID, month time.Month) {
 		},
 	}
 
-	f, _ := os.Create("output.png")
+	f, _ := os.Create("piechart.png")
 	defer f.Close()
-	pie.Render(chart.PNG, f)
+	err = pie.Render(chart.PNG, f)
+	if err != nil {
+		return
+	}
 }
