@@ -4,20 +4,19 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	_ "go.mongodb.org/mongo-driver/bson/primitive"
 	"main/src/admin"
-	"main/src/gui"
 	_ "main/src/services"
 )
 
 var currentuser int
 var xs [30]float64
 
-func mean(xs [30]float64) float64 {
-	total := 0.0
-	for _, v := range xs {
-		total += v
-	}
-	return total / float64(len(xs))
-}
+//func mean(xs [30]float64) float64 {
+//	total := 0.0
+//	for _, v := range xs {
+//		total += v
+//	}
+//	return total / float64(len(xs))
+//}
 
 func main() {
 	//TODO: dodavanje troskova po kategorijama
@@ -31,146 +30,148 @@ func main() {
 
 	admin.SetupSeed()
 	gtk.Init(nil)
-	gui.SetupGui()
+	SetupGui()
 	gtk.Main()
-	//plots.DrawChart()
 
 	//if EntryUpIncomeAmount != -1 {
 	//	if EntryUpIncomeAmount <= 50000 {
 	//		currentuser = 0
 	//	}
-	//	if EntryUpIncomeAmount >= 50000 && EntryUpIncomeAmount <= 15000 {
+	//	if EntryUpIncomeAmount >= 50000 && EntryUpIncomeAmount <= 150000 {
 	//		currentuser = 1
 	//	}
 	//	if EntryUpIncomeAmount >= 150000 {
 	//		currentuser = 2
 	//	}
+	//}
+
+	//Currentusermean = make(map[string]float64)
+	//idfood, _ := admin.CategoryService.FindOne("food")
+	//idclot, _ := admin.CategoryService.FindOne("clothes")
+	//idchem, _ := admin.CategoryService.FindOne("chem")
+	//idother, _ := admin.CategoryService.FindOne("other")
+	//idbills, _ := admin.CategoryService.FindOne("bills")
+	//
+	//if currentuser == 0 {
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
+	//	}
+	//
+	//	Currentusermean["food"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
+	//	}
+	//
+	//	Currentusermean["clothes"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
+	//	}
+	//
+	//	Currentusermean["chem"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
+	//	}
+	//
+	//	Currentusermean["bills"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
+	//	}
+	//
+	//	Currentusermean["othes"] = mean(xs)
+	//
+	//}
+	//
+	//if currentuser == 1 {
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
+	//	}
+	//
+	//	Currentusermean["food"] = mean(xs)
+	//
+	//	fmt.Println(Currentusermean["food"])
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
+	//	}
+	//
+	//	Currentusermean["clothes"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
+	//	}
+	//
+	//	Currentusermean["chem"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
+	//	}
+	//
+	//	Currentusermean["bills"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
+	//	}
+	//
+	//	Currentusermean["othes"] = mean(xs)
+	//
+	//}
+	//
+	//if currentuser == 2 {
+	//	fmt.Println("caos")
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
+	//	}
+	//
+	//	Currentusermean["food"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
+	//	}
+	//
+	//	Currentusermean["clothes"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
+	//	}
+	//
+	//	Currentusermean["chem"] = mean(xs)
+	//
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
+	//	}
+	//
+	//	Currentusermean["bills"] = mean(xs)
+	//	for i := 0; i < 5; i++ {
+	//		idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
+	//		xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
+	//	}
+	//
+	//	Currentusermean["others"] = mean(xs)
 	//
 	//}
 
-	currentusermean := make(map[string]float64)
-	idfood, _ := admin.CategoryService.FindOne("food")
-	idclot, _ := admin.CategoryService.FindOne("clothes")
-	idchem, _ := admin.CategoryService.FindOne("chem")
-	idother, _ := admin.CategoryService.FindOne("other")
-	idbills, _ := admin.CategoryService.FindOne("bills")
 
-	if currentuser == 0 {
 
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
-		}
-
-		currentusermean["food"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
-		}
-
-		currentusermean["clothes"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
-		}
-
-		currentusermean["chem"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
-		}
-
-		currentusermean["bills"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID0[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
-		}
-
-		currentusermean["othes"] = mean(xs)
-
-	}
-
-	if currentuser == 1 {
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
-		}
-
-		currentusermean["food"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
-		}
-
-		currentusermean["clothes"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
-		}
-
-		currentusermean["chem"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
-		}
-
-		currentusermean["bills"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
-		}
-
-		currentusermean["othes"] = mean(xs)
-
-	}
-
-	if currentuser == 2 {
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idfood.ID)
-		}
-
-		currentusermean["food"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idclot.ID)
-		}
-
-		currentusermean["clothes"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idchem.ID)
-		}
-
-		currentusermean["chem"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idbills.ID)
-		}
-
-		currentusermean["bills"] = mean(xs)
-
-		for i := 0; i < 5; i++ {
-			idp, _ := admin.UserService.FindOne(admin.UsersID2[i])
-			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idother.ID)
-		}
-
-		currentusermean["othes"] = mean(xs)
-
-	}
 
 	//plots.PieChart()
 }
