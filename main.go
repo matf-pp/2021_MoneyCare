@@ -4,6 +4,7 @@ import (
 	"github.com/gotk3/gotk3/gtk"
 	_ "go.mongodb.org/mongo-driver/bson/primitive"
 	"main/src/admin"
+	"main/src/gui"
 	_ "main/src/services"
 )
 
@@ -30,21 +31,22 @@ func main() {
 
 	admin.SetupSeed()
 	gtk.Init(nil)
-	SetupGui()
+	gui.SetupGui()
 	gtk.Main()
+	//plots.DrawChart()
 
-	if EntryUpIncomeAmount != -1 {
-		if EntryUpIncomeAmount <= 50000 {
-			currentuser = 0
-		}
-		if EntryUpIncomeAmount >= 50000 && EntryUpIncomeAmount <= 15000 {
-			currentuser = 1
-		}
-		if EntryUpIncomeAmount >= 150000 {
-			currentuser = 2
-		}
-
-	}
+	//if EntryUpIncomeAmount != -1 {
+	//	if EntryUpIncomeAmount <= 50000 {
+	//		currentuser = 0
+	//	}
+	//	if EntryUpIncomeAmount >= 50000 && EntryUpIncomeAmount <= 15000 {
+	//		currentuser = 1
+	//	}
+	//	if EntryUpIncomeAmount >= 150000 {
+	//		currentuser = 2
+	//	}
+	//
+	//}
 
 	currentusermean := make(map[string]float64)
 	idfood, _ := admin.CategoryService.FindOne("food")

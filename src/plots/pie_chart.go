@@ -5,9 +5,10 @@ import (
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"main/src/admin"
 	"os"
+	"time"
 )
 
-func PieChart(userID primitive.ObjectID) {
+func PieChart(userID primitive.ObjectID, month time.Month) {
 	categoryService := admin.CategoryService
 	spendingService := admin.SpendingService
 
@@ -15,31 +16,31 @@ func PieChart(userID primitive.ObjectID) {
 	if err != nil {
 		panic(err)
 	}
-	foodAmount := spendingService.FindUsersSpendingByCategory(userID, foodID.ID)
+	foodAmount := spendingService.FindUsersSpendingByCategoryByMonth(userID, foodID.ID, month)
 	billsID, err := categoryService.FindOne("bills")
 	if err != nil {
 		panic(err)
 	}
-	billsAmount := spendingService.FindUsersSpendingByCategory(userID, billsID.ID)
+	billsAmount := spendingService.FindUsersSpendingByCategoryByMonth(userID, billsID.ID, month)
 	clothesID, err := categoryService.FindOne("clothes")
 	if err != nil {
 		panic(err)
 	}
-	clothesAmount := spendingService.FindUsersSpendingByCategory(userID, clothesID.ID)
+	clothesAmount := spendingService.FindUsersSpendingByCategoryByMonth(userID, clothesID.ID, month)
 	otherID, err := categoryService.FindOne("other")
 	if err != nil {
 		panic(err)
 	}
-	otherAmount := spendingService.FindUsersSpendingByCategory(userID, otherID.ID)
+	otherAmount := spendingService.FindUsersSpendingByCategoryByMonth(userID, otherID.ID, month)
 	chemID, err := categoryService.FindOne("chem")
 	if err != nil {
 		panic(err)
 	}
-	chemAmount := spendingService.FindUsersSpendingByCategory(userID, chemID.ID)
+	chemAmount := spendingService.FindUsersSpendingByCategoryByMonth(userID, chemID.ID, month)
 
 	pie := chart.PieChart{
-		Width:  512,
-		Height: 512,
+		Width:  256,
+		Height: 256,
 		Values: []chart.Value{
 			{Value: foodAmount, Label: "Food"},
 			{Value: billsAmount, Label: "Bills"},

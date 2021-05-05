@@ -8,10 +8,12 @@ import (
 	"main/src/admin"
 	"main/src/plots"
 	"main/src/services"
+	"time"
 )
 
 var Username string
 var UserID primitive.ObjectID
+var UserMonth time.Month = time.Now().Month()
 
 func addSpending(cat string, entry *gtk.Entry) {
 	categoryService := admin.CategoryService
@@ -24,7 +26,7 @@ func addSpending(cat string, entry *gtk.Entry) {
 }
 
 func showBalance(service *services.SpendingService, label *gtk.Label, pb *gtk.ProgressBar) {
-	spent := service.FindUsersSpending(UserID)
+	spent := service.FindUsersSpendingByMonth(UserID, UserMonth)
 	s := fmt.Sprint("Potrosili ste: ", spent)
 	label.SetText(s)
 
@@ -41,7 +43,7 @@ func showBalance(service *services.SpendingService, label *gtk.Label, pb *gtk.Pr
 func showBalanceByCat(service *services.SpendingService, label *gtk.Label, pb *gtk.ProgressBar, cat string) {
 	categoryService := admin.CategoryService
 	catID, err := categoryService.FindOne(cat)
-	spent := service.FindUsersSpendingByCategory(UserID, catID.ID)
+	spent := service.FindUsersSpendingByCategoryByMonth(UserID, catID.ID, UserMonth)
 	s := fmt.Sprint("Potrosili ste: ", spent)
 	label.SetText(s)
 
@@ -131,6 +133,12 @@ func setupProgressBar() *gtk.ProgressBar {
 }
 
 func SetupGui() {
+
+	cal, err := gtk.CalendarNew()
+	if err != nil {
+		panic(err)
+	}
+
 	win := setupWindow("Money Care")
 	fixed := setupFixed()
 	fixedSignIn := setupFixed()
@@ -173,10 +181,19 @@ func SetupGui() {
 	btHist := setupBtn("HISTOGRAM", func() {
 
 	})
+	//TODO: mozda da se azurira slika na svako dodavanje odmah, ako stignem
 	btPieChart := setupBtn("PIECHART", func() {
-		plots.PieChart(UserID)
+		plots.PieChart(UserID, UserMonth)
+		imgGraph, err := gtk.ImageNewFromFile("/home/bogdanis/Desktop/PP/2021_MoneyCare/output.png")
+		if err != nil {
+			panic(err)
+		}
+		fixed.Put(imgGraph, 441, 60)
+		imgGraph.Show()
 	})
+
 	btGraph := setupBtn("GRAPH", func() {
+		plots.DrawChart(UserID, time.Now())
 
 	})
 
@@ -242,7 +259,8 @@ func SetupGui() {
 		UserID = user.ID
 
 		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
-
+		fmt.Println(cal.GetDate())
+		//y, d, m := cal.GetDate()
 		popupSignIn.Hide()
 	})
 
@@ -301,6 +319,12 @@ func SetupGui() {
 		popupSignUp.Hide()
 	})
 
+	btCalOK := setupBtn("OK", func() {
+		_, m, _ := cal.GetDate()
+		UserMonth = time.Month(m + 1)
+		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
+	})
+
 	fixed.Put(labelFoodEx, 250, 100)
 	fixed.Put(labelChemEx, 250, 200)
 	fixed.Put(labelClothesEx, 250, 300)
@@ -312,7 +336,7 @@ func SetupGui() {
 	fixed.Put(pbClo, 100, 350)
 	fixed.Put(pbBill, 100, 450)
 	fixed.Put(pbOth, 100, 550)
-	fixed.Put(pb, 470, 500)
+	fixed.Put(pb, 400, 500)
 
 	fixed.Put(btSignUp, 10, 10)
 	fixed.Put(btSignIn, 110, 10)
@@ -325,7 +349,10 @@ func SetupGui() {
 	fixed.Put(btPieChart, 532, 10)
 	fixed.Put(btGraph, 441, 10)
 
-	fixed.Put(labBalance, 520, 450)
+	fixed.Put(cal, 600, 500)
+	fixed.Put(btCalOK, 600, 450)
+
+	fixed.Put(labBalance, 450, 450)
 	//fixed.Put(entry, 335, 380)
 	//fixed.Put(popupIn,12,30)
 
