@@ -13,7 +13,7 @@ Aplikacija koja prati potrosnju novca i na osnovu toga daje korisniku statistick
 * <https://go.mongodb.org/mongo-driver/bson>
 ***
 ## Pokretanje (terminal)
-* Kloniranje repozitorijuma
+* Kloniranje repozitorijuma:
  `git clone https://github.com/matf-pp/2021_MoneyCare.git` 
 * Pozicionirati se u folder koji ste klonirali i prevedite projekat sa: 
  ` go build  -o MoneyCare` 
