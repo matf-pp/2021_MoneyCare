@@ -36,10 +36,6 @@ func (userService *UserService) InsertFromEntry(entryUN *gtk.Entry, entryG *gtk.
 	}
 	result := userService.userCollection.FindOne(*userService.ctx, bson.M{"username": un})
 	fmt.Println(result)
-	//if result == nil {
-	//	entryUN.SetText("Username already taken")
-	//	fmt.Println("Username already taken")
-	//} else {
 
 	g1, err := entryG.GetText()
 	if err != nil {
@@ -70,7 +66,7 @@ func (userService *UserService) InsertFromEntry(entryUN *gtk.Entry, entryG *gtk.
 	if err != nil {
 		panic(err)
 	}
-	//}
+
 }
 
 func (userService *UserService) FindOne(Cname string) (models.User, error) {

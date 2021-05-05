@@ -62,7 +62,6 @@ func (spendingService *SpendingService) FindUsersSpending(userIdp primitive.Obje
 		spent += spendingsFiltered[i].Amount
 	}
 
-	//fmt.Println(spent)
 	return spent
 }
 
@@ -85,7 +84,6 @@ func (spendingService *SpendingService) FindUsersSpendingByMonth(userIdp primiti
 		}
 	}
 
-	//fmt.Println(spent)
 	return spent
 }
 
@@ -110,7 +108,6 @@ func (spendingService *SpendingService) FindUsersSpendingByDate(userIdp primitiv
 		}
 	}
 
-	//fmt.Println(spent)
 	return spent
 }
 
@@ -131,7 +128,6 @@ func (spendingService *SpendingService) FindUsersSpendingByCategory(userIdp prim
 		spent += spendingsFiltered[i].Amount
 	}
 
-	//fmt.Println(spent)
 	return spent
 }
 
@@ -156,30 +152,6 @@ func (spendingService *SpendingService) FindUsersSpendingByCategoryByMonth(userI
 
 	return spent
 }
-
-//func (spendingService *SpendingService) FindUsersSpendingByCategoryByDate(userIdp primitive.ObjectID, categoryIDp primitive.ObjectID, ourTime time.Time) float64 {
-//	var spendingsFiltered []models.Spending
-//	filterCursor, err := spendingService.spendingCollection.Find(*spendingService.ctx, bson.M{"userId": userIdp, "categoryId": categoryIDp})
-//	if err != nil {
-//		panic(err)
-//	}
-//
-//	if err = filterCursor.All(*spendingService.ctx, &spendingsFiltered); err != nil {
-//		log.Fatal(err)
-//	}
-//
-//	n := len(spendingsFiltered)
-//	spent := 0.0
-//	for i := 0; i < n; i++ {
-//		//datum u obliku (godina, mesec, dan)
-//		if spendingsFiltered[i].Time.Date()==ourTime.Date() {
-//			spent += spendingsFiltered[i].Amount
-//		}
-//	}
-//
-//	return spent
-//}
-
 func (spendingService *SpendingService) Find(userIdp primitive.ObjectID) (models.Spending, error) {
 	var result models.Spending
 	err := spendingService.spendingCollection.FindOne(*spendingService.ctx, bson.M{"username": userIdp}).Decode(&result)

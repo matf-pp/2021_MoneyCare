@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/gotk3/gotk3/gtk"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 	"log"
 	"main/src/admin"
 	"main/src/plots"
@@ -13,12 +14,12 @@ import (
 	"time"
 )
 
-var EntryUpIncomeAmount int = -1
-var CurrentUserMean map[string]float64 = make(map[string]float64)
-var Username string = ""
+var EntryUpIncomeAmount = -1
+var CurrentUserMean = make(map[string]float64)
+var Username string
 var UserID primitive.ObjectID
-var UserMonth time.Month = time.Now().Month()
-var UserTime time.Time = time.Now()
+var UserMonth = time.Now().Month()
+var UserTime = time.Now()
 
 var ImgPie *gtk.Image
 var ImgGraph *gtk.Image
@@ -104,8 +105,6 @@ func SetCurrentUserMean() {
 
 		CurrentUserMean["food"] = mean(xs)
 
-		fmt.Println(CurrentUserMean["food"])
-
 		for i := 0; i < 5; i++ {
 			idp, _ := admin.UserService.FindOne(admin.UsersID1[i])
 			xs[i] = admin.SpendingService.FindUsersSpendingByCategory(idp.ID, idClot.ID)
@@ -170,9 +169,7 @@ func SetCurrentUserMean() {
 		}
 
 		CurrentUserMean["other"] = mean(xs)
-
 	}
-
 }
 
 func addSpending(cat string, entry *gtk.Entry) {
@@ -194,7 +191,6 @@ func showWarning(cat string, eps float64, popup *gtk.Window) {
 	}
 	spendingService := admin.SpendingService
 	s := spendingService.FindUsersSpendingByCategory(UserID, catID.ID)
-	fmt.Println(s, CurrentUserMean[cat])
 	if math.Abs(s-CurrentUserMean[cat]) < eps || s > CurrentUserMean[cat] {
 		popup.ShowAll()
 	}
@@ -219,7 +215,7 @@ func showWarningForGoal(percent float64, popupGoal *gtk.Window) {
 
 func showBalance(service *services.SpendingService, label *gtk.Label, pb *gtk.ProgressBar) {
 	spent := service.FindUsersSpendingByMonth(UserID, UserMonth)
-	s := fmt.Sprint("Potrosili ste: ", spent)
+	s := fmt.Sprint("You've spent : ", spent)
 	label.SetText(s)
 
 	userService := admin.UserService
@@ -239,7 +235,7 @@ func showBalanceByCat(service *services.SpendingService, label *gtk.Label, pb *g
 		panic(err)
 	}
 	spent := service.FindUsersSpendingByCategoryByMonth(UserID, catID.ID, UserMonth)
-	s := fmt.Sprint("Potrosili ste: ", spent)
+	s := fmt.Sprint("You've spent : ", spent)
 	label.SetText(s)
 	total := CurrentUserMean[cat]
 	x := (100.00 * spent / total) / 100.00
@@ -374,8 +370,8 @@ func SetupGui() {
 			if err != nil {
 				panic(err)
 			}
-			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
-			dial.SetTitle("Uloguj se")
+			dial.AddButton("PLEASE SIGN IN", gtk.RESPONSE_OK)
+			dial.SetTitle("Please")
 			dial.Show()
 		} else {
 			popupFood.ShowAll()
@@ -387,8 +383,8 @@ func SetupGui() {
 			if err != nil {
 				panic(err)
 			}
-			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
-			dial.SetTitle("Uloguj se")
+			dial.AddButton("PLEASE SIGN IN", gtk.RESPONSE_OK)
+			dial.SetTitle("Please")
 			dial.Show()
 		} else {
 			popupChem.ShowAll()
@@ -400,8 +396,8 @@ func SetupGui() {
 			if err != nil {
 				panic(err)
 			}
-			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
-			dial.SetTitle("Uloguj se")
+			dial.AddButton("PLEASE SIGN IN", gtk.RESPONSE_OK)
+			dial.SetTitle("Please")
 			dial.Show()
 		} else {
 			popupClo.ShowAll()
@@ -413,8 +409,8 @@ func SetupGui() {
 			if err != nil {
 				panic(err)
 			}
-			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
-			dial.SetTitle("Uloguj se")
+			dial.AddButton("PLEASE SIGN IN", gtk.RESPONSE_OK)
+			dial.SetTitle("Please")
 			dial.Show()
 		} else {
 			popupBills.ShowAll()
@@ -426,37 +422,22 @@ func SetupGui() {
 			if err != nil {
 				panic(err)
 			}
-			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
-			dial.SetTitle("Uloguj se")
+			dial.AddButton("PLEASE SIGN IN", gtk.RESPONSE_OK)
+			dial.SetTitle("Please")
 			dial.Show()
 		} else {
 			popupOth.ShowAll()
 		}
 	})
-	btHist := setupBtn("HISTOGRAM", func() {
-		if Username == "" {
-			dial, err := gtk.DialogNew()
-			if err != nil {
-				panic(err)
-			}
-			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
-			dial.SetTitle("Uloguj se")
-			dial.Show()
-		} else {
-		}
 
-	})
-
-	//TODO: mozda da se azurira slika na svako dodavanje odmah, ako stignem
 	btPieChart := setupBtn("PIECHART", func() {
-
 		if Username == "" {
 			dial, err := gtk.DialogNew()
 			if err != nil {
 				panic(err)
 			}
-			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
-			dial.SetTitle("Uloguj se")
+			dial.AddButton("PLEASE SIGN IN", gtk.RESPONSE_OK)
+			dial.SetTitle("Please")
 			dial.Show()
 		} else {
 			if ImgPie != nil && ImgPie.IsVisible() {
@@ -481,8 +462,8 @@ func SetupGui() {
 			if err != nil {
 				panic(err)
 			}
-			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
-			dial.SetTitle("Uloguj se")
+			dial.AddButton("PLEASE SIGN IN", gtk.RESPONSE_OK)
+			dial.SetTitle("Please")
 			dial.Show()
 		} else {
 			if ImgGraph != nil && ImgGraph.IsVisible() {
@@ -508,17 +489,17 @@ func SetupGui() {
 	labelOtherEx := setupLabel("balance")
 	labelClothesEx := setupLabel("balance")
 
-	labUpID := setupLabel("ID: ")
-	labUpIncome := setupLabel("PRIHODI: ")
-	labUpOutgoings := setupLabel("RASHODI: ")
-	labUpGoal := setupLabel("CILJ: ")
-	labFood := setupLabel("Unesite iznos u dinarima: ")
-	labChem := setupLabel("Unesite iznos u dinarima: ")
-	labOth := setupLabel("Unesite iznos u dinarima: ")
-	labClo := setupLabel("Unesite iznos u dinarima: ")
-	labBills := setupLabel("Unesite iznos u dinarima: ")
-	labWarning := setupLabel("Trosite suvise novca\nna ovu kategoriju")
-	labWarningGoal := setupLabel("Pazite na ostvarenje cilja!")
+	labUpID := setupLabel("USERNAME: ")
+	labUpIncome := setupLabel("INCOME: ")
+	labUpOutgoings := setupLabel("OUTGOINGS: ")
+	labUpGoal := setupLabel("GOAL: ")
+	labFood := setupLabel("Enter amount: ")
+	labChem := setupLabel("Enter amount: ")
+	labOth := setupLabel("Enter amount: ")
+	labClo := setupLabel("Enter amount: ")
+	labBills := setupLabel("Enter amount: ")
+	labWarning := setupLabel("Spending too much\non this category!")
+	labWarningGoal := setupLabel("Remember your goal!")
 
 	labUsername := setupLabel("USERNAME")
 
@@ -529,7 +510,6 @@ func SetupGui() {
 	pbOth := setupProgressBar()
 	pb := setupProgressBar()
 
-	//entry := setupEntry()
 	entryIn := setupEntry()
 	entryUpID := setupEntry()
 	entryUpOutgoings := setupEntry()
@@ -546,39 +526,44 @@ func SetupGui() {
 		if err != nil {
 			panic(err)
 		}
-		enGoal, err := entryUpID.GetText()
+
+		enGoal, err := entryUpGoal.GetText()
 		if err != nil {
 			panic(err)
 		}
-		enIncome, err := entryUpID.GetText()
+		enIncome, err := entryUpIncome.GetText()
 		if err != nil {
 			panic(err)
 		}
-		enOutgoings, err := entryUpID.GetText()
+		enOutgoings, err := entryUpOutgoings.GetText()
 		if err != nil {
 			panic(err)
 		}
 
-		if enId == "" {
-			entryUpID.SetText("Unesite podatak")
+		userService := admin.UserService
+		us, err := userService.FindOne(enId)
+
+		if err != mongo.ErrNoDocuments {
+			entryUpID.SetText("USERNAME TAKEN")
+		} else if enId == "" {
+			entryUpID.SetText("Enter username")
 		} else if enGoal == "" {
-			entryUpGoal.SetText("Unesite podatak")
+			entryUpGoal.SetText("Enter goal")
 		} else if enIncome == "" {
-			entryUpIncome.SetText("Unesite podatak")
+			entryUpIncome.SetText("Enter income")
 		} else if enOutgoings == "" {
-			entryUpOutgoings.SetText("Unesite podatak")
+			entryUpOutgoings.SetText("Enter outgoings")
 		} else {
 
-			userService := admin.UserService
 			userService.InsertFromEntry(entryUpID, entryUpGoal, entryUpIncome, entryUpOutgoings)
-			uname, err := entryUpID.GetText()
+
 			str, err := entryUpIncome.GetText()
 			EntryUpIncomeAmount, _ = strconv.Atoi(str)
 			if err != nil {
 				panic(err)
 			}
-			Username = uname
-			user, err := userService.FindOne(uname)
+			Username = us.Username
+			user, err := userService.FindOne(us.Username)
 			UserID = user.ID
 			popupSignUp.Hide()
 		}
@@ -587,24 +572,27 @@ func SetupGui() {
 
 	btSignInOK := setupBtn("OK", func() {
 		userService := admin.UserService
-		userService.FindOneFromEntry(entryIn)
 		uname, err := entryIn.GetText()
 		if err != nil {
 			panic(err)
 		}
-		Username = uname
 		user, err := userService.FindOne(uname)
-		UserID = user.ID
 
-		showUsername(Username, labUsername)
+		if err == mongo.ErrNoDocuments {
+			entryIn.SetText("DOESN'T EXIST")
+		} else {
 
-		EntryUpIncomeAmount = int(user.Income)
-		SetCurrentUserMean()
+			Username = uname
+			UserID = user.ID
 
-		showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
-		fmt.Println(cal.GetDate())
-		//y, d, m := cal.GetDate()
-		popupSignIn.Hide()
+			showUsername(Username, labUsername)
+
+			EntryUpIncomeAmount = int(user.Income)
+			SetCurrentUserMean()
+
+			showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
+			popupSignIn.Hide()
+		}
 	})
 
 	btFoodOK := setupBtn("OK", func() {
@@ -679,13 +667,12 @@ func SetupGui() {
 			if err != nil {
 				panic(err)
 			}
-			dial.AddButton("ULOGUJ SE", gtk.RESPONSE_OK)
-			dial.SetTitle("Uloguj se")
+			dial.AddButton("PLEASE SIGN IN", gtk.RESPONSE_OK)
+			dial.SetTitle("Please")
 			dial.Show()
 		} else {
 			y, m, d := cal.GetDate()
 			UserTime = time.Date(int(y), time.Month(m+1), int(d), 12, 12, 12, 12, time.Local)
-			fmt.Println(UserTime)
 			UserMonth = time.Month(m + 1)
 			showBalanceForAll(labBalance, labelFoodEx, labelClothesEx, labelChemEx, labelOtherEx, labelBillsEx, pb, pbFood, pbClo, pbChem, pbOth, pbBill)
 		}
@@ -711,7 +698,6 @@ func SetupGui() {
 	fixed.Put(btClo, 100, 300)
 	fixed.Put(btBill, 100, 400)
 	fixed.Put(btOth, 100, 500)
-	fixed.Put(btHist, 640, 10)
 	fixed.Put(btPieChart, 532, 10)
 	fixed.Put(btGraph, 441, 10)
 
