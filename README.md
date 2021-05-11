@@ -18,7 +18,7 @@ Aplikacija koja prati potrosnju novca i na osnovu toga daje korisniku statistick
 *   Pozicionirati se u folder koji ste klonirali i prevedite projekat sa: 
  ` go build  -o MoneyCare` 
 *   Pokretanje:
- `./main` 
+ `./MoneyCare` 
 ***
 ## Autori
 *   Bogdan Markovic -- bogdanis799@gmail.com (alas mail mi18130@alas.matf.bg.ac.rs)
